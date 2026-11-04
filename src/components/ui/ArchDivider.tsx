@@ -14,14 +14,14 @@ interface ArchDividerProps {
 export function ArchDivider({
   variant = "dark",
   inverted = false,
-  withPendant = true,
+  withPendant = false,
   className = "",
 }: ArchDividerProps) {
   const strokeColor = variant === "dark" ? "#E2C196" : "#B07A4F";
 
   return (
     <div
-      className={`relative w-full overflow-hidden flex flex-col items-center justify-center pointer-events-none ${className}`}
+      className={`relative w-full overflow-hidden flex flex-col items-center justify-center pointer-events-none select-none ${className}`}
       aria-hidden="true"
     >
       <svg
@@ -44,7 +44,7 @@ export function ArchDivider({
         />
       </svg>
 
-      {/* Delicate suspended pendant light */}
+      {/* Optional suspended pendant light */}
       {withPendant && (
         <m.div
           initial={{ opacity: 0, y: -16 }}
@@ -73,4 +73,3 @@ export function ArchDivider({
     </div>
   );
 }
-

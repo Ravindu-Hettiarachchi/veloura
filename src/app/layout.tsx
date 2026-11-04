@@ -37,6 +37,7 @@ export const metadata: Metadata = {
     "bespoke residences",
     "editorial interior",
     "Colombo interior design",
+    "Sri Lanka architecture",
   ],
   authors: [{ name: "VELOURA Atelier" }],
   creator: "VELOURA",
@@ -47,9 +48,9 @@ export const metadata: Metadata = {
     siteName: siteConfig.name,
     images: [
       {
-        url: "/images/hero.jpg",
-        width: 1920,
-        height: 1080,
+        url: "/images/og-image.jpg",
+        width: 1200,
+        height: 630,
         alt: "VELOURA Interior Design Studio Architectural Gallery",
       },
     ],
@@ -60,7 +61,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: `${siteConfig.shortName} — ${siteConfig.tagline}`,
     description: siteConfig.description,
-    images: ["/images/hero.jpg"],
+    images: ["/images/og-image.jpg"],
   },
   icons: {
     icon: "/icon.png",
@@ -93,4 +94,3 @@ export default function RootLayout({
     </html>
   );
 }
-

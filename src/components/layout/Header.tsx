@@ -49,14 +49,14 @@ export function Header() {
       <header
         className={`fixed top-0 left-0 right-0 z-50 transition-all duration-700 ease-[cubic-bezier(0.76,0,0.24,1)] ${
           isScrolled
-            ? "bg-[#24160F]/90 backdrop-blur-md py-4 border-b border-[#E2C196]/20 shadow-2xl"
+            ? "bg-[#24160F]/92 backdrop-blur-md py-4 border-b border-[#E2C196]/20 shadow-2xl"
             : "bg-transparent py-6 sm:py-8 border-b border-transparent"
         }`}
       >
         <div className="max-w-7xl mx-auto px-6 sm:px-10 flex items-center justify-between">
-          {/* Logo */}
+          {/* Logo links to #top */}
           <Link
-            href="#"
+            href="#top"
             className="group relative flex items-center focus-visible:ring-2 focus-visible:ring-caramel rounded-sm"
             aria-label="VELOURA Home"
             onClick={() => setMobileMenuOpen(false)}
@@ -73,27 +73,27 @@ export function Header() {
             </div>
           </Link>
 
-          {/* Desktop Navigation */}
+          {/* Desktop Navigation: Exactly matches Studio, Portfolio, Ethos, Process, Enquiry */}
           <nav
-            className="hidden md:flex items-center space-x-10 lg:space-x-12"
+            className="hidden md:flex items-center space-x-8 lg:space-x-10"
             aria-label="Main Navigation"
           >
             {siteConfig.navigation.map((item) => (
               <a
                 key={item.label}
                 href={item.href}
-                className="text-xs uppercase tracking-[0.2em] font-medium text-cream/80 hover:text-caramel transition-colors duration-300 relative py-1 after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-0 after:h-[1px] after:bg-caramel hover:after:w-full after:transition-all after:duration-500 after:ease-[cubic-bezier(0.76,0,0.24,1)]"
+                className="text-xs uppercase tracking-[0.2em] font-medium text-cream/80 hover:text-caramel transition-colors duration-300 relative py-1 after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-0 after:h-[1px] after:bg-caramel hover:after:w-full after:transition-all after:duration-500 after:ease-[cubic-bezier(0.76,0,0.24,1)] focus-visible:ring-2 focus-visible:ring-caramel rounded-xs"
               >
                 {item.label}
               </a>
             ))}
           </nav>
 
-          {/* Enquire CTA Button (Desktop) */}
+          {/* Enquire CTA Button (Desktop, min 48px tap target) */}
           <div className="hidden md:flex items-center">
             <a
               href="#enquiry"
-              className="px-6 py-2.5 rounded-full border border-caramel/70 text-caramel hover:bg-caramel hover:text-espresso uppercase text-[11px] font-medium tracking-[0.2em] transition-all duration-500 ease-[cubic-bezier(0.76,0,0.24,1)] active:scale-[0.98]"
+              className="min-h-[48px] px-6 py-2.5 inline-flex items-center justify-center rounded-full border border-caramel/70 text-caramel hover:bg-caramel hover:text-espresso uppercase text-[11px] font-medium tracking-[0.2em] transition-all duration-500 ease-[cubic-bezier(0.76,0,0.24,1)] active:scale-[0.98] focus-visible:ring-2 focus-visible:ring-caramel"
             >
               Enquire
             </a>
@@ -139,7 +139,7 @@ export function Header() {
             aria-modal="true"
             aria-label="Mobile Navigation"
           >
-            {/* Top brand icon background watermark */}
+            {/* Top brand icon background decorative watermark */}
             <div
               className="absolute -top-12 -right-12 w-80 h-80 opacity-[0.04] pointer-events-none"
               aria-hidden="true"
@@ -163,7 +163,7 @@ export function Header() {
                   <a
                     href={item.href}
                     onClick={() => setMobileMenuOpen(false)}
-                    className="min-h-[52px] flex items-center font-serif text-3xl sm:text-4xl text-cream hover:text-caramel transition-colors tracking-wide border-b border-caramel/15"
+                    className="min-h-[52px] flex items-center font-serif text-3xl sm:text-4xl text-cream hover:text-caramel transition-colors tracking-wide border-b border-caramel/15 focus-visible:ring-2 focus-visible:ring-caramel"
                   >
                     <span className="text-xs font-sans tracking-[0.2em] text-caramel/60 mr-4">
                       0{idx + 1}
@@ -183,13 +183,13 @@ export function Header() {
               <a
                 href="#enquiry"
                 onClick={() => setMobileMenuOpen(false)}
-                className="min-h-[52px] w-full flex items-center justify-center rounded-full border border-caramel text-caramel hover:bg-caramel hover:text-espresso uppercase text-xs tracking-[0.25em] font-medium transition-all duration-500 ease-[cubic-bezier(0.76,0,0.24,1)]"
+                className="min-h-[52px] w-full flex items-center justify-center rounded-full border border-caramel text-caramel hover:bg-caramel hover:text-espresso uppercase text-xs tracking-[0.25em] font-medium transition-all duration-500 ease-[cubic-bezier(0.76,0,0.24,1)] focus-visible:ring-2 focus-visible:ring-caramel"
               >
                 Start an Enquiry
               </a>
 
               <p className="text-[12px] text-cream/50 tracking-wider text-center">
-                {siteConfig.contact.city}
+                Interior design studio, Colombo.
               </p>
             </m.div>
           </m.div>
@@ -198,4 +198,3 @@ export function Header() {
     </>
   );
 }
-

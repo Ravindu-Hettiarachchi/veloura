@@ -10,10 +10,10 @@ export function Studio() {
   return (
     <section
       id="studio"
-      className="relative bg-[#F2E8DC] text-[#3B2417] py-28 sm:py-36 px-6 sm:px-12 overflow-hidden"
+      className="relative bg-[#F2E8DC] text-[#3B2417] py-28 sm:py-36 px-6 sm:px-12 overflow-hidden scroll-mt-24 sm:scroll-mt-28"
       aria-label="About the Studio"
     >
-      {/* Low-opacity (5%) Oversized Emblem Watermark */}
+      {/* Decorative Low-opacity (5%) Emblem Watermark */}
       <div
         className="absolute top-1/2 -left-24 sm:-left-32 -translate-y-1/2 w-[480px] sm:w-[680px] h-[580px] sm:h-[780px] opacity-[0.05] pointer-events-none select-none z-0"
         aria-hidden="true"
@@ -97,19 +97,20 @@ export function Studio() {
           <div className="lg:col-span-7 relative">
             <FadeIn delay={0.2} className="relative z-10">
               {/* Primary Tall Arch-Cropped Container */}
-              <div className="group relative w-full aspect-[3/4] max-w-[520px] mx-auto lg:ml-auto rounded-t-[140px] sm:rounded-t-[220px] rounded-b-none overflow-hidden border border-[#B07A4F]/35 shadow-xl bg-[#5A3A2A]">
+              <div className="group relative w-full aspect-[4/5] max-w-[520px] mx-auto lg:ml-auto rounded-t-[140px] sm:rounded-t-[220px] rounded-b-none overflow-hidden border border-[#B07A4F]/35 shadow-xl bg-[#5A3A2A]">
                 <m.div
                   className="w-full h-full relative"
                   whileHover={{ scale: 1.05 }}
                   transition={{ duration: 0.8, ease: EASE }}
                 >
                   <Image
-                    src="/images/studio-primary.jpg"
-                    alt="Bespoke interior volume crafted with natural travertine stone by VELOURA"
+                    src="/images/studio-primary.webp"
+                    alt="Tall arched opening in a plaster wall with soft shadow gradient and sculptural ceramic vase"
                     fill
                     sizes="(max-width: 1024px) 90vw, 520px"
                     className="object-cover object-center"
                     loading="lazy"
+                    decoding="async"
                   />
                 </m.div>
 
@@ -134,12 +135,13 @@ export function Studio() {
                   transition={{ duration: 0.8, ease: EASE }}
                 >
                   <Image
-                    src="/images/studio-detail.jpg"
-                    alt="Detail study of honed stone and hand-brushed bronze joinery"
+                    src="/images/studio-detail.webp"
+                    alt="Bronze handle detail on smoked oak joinery beside a honed stone edge"
                     fill
                     sizes="(max-width: 640px) 192px, 288px"
                     className="object-cover object-center"
                     loading="lazy"
+                    decoding="async"
                   />
                 </m.div>
 
@@ -157,4 +159,3 @@ export function Studio() {
     </section>
   );
 }
-

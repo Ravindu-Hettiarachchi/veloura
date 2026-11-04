@@ -3,13 +3,13 @@ export interface Project {
   title: string;
   category: "Residential" | "Commercial";
   location: string;
-  year: string;
   image: string;
   width: number;
   height: number;
   aspectRatio: string;
   spanDesktop: string;
   isArchCropped?: boolean;
+  isSample: boolean;
   synopsis: string;
 }
 
@@ -18,91 +18,90 @@ export const projects: Project[] = [
     id: "monolith-residence",
     title: "The Monolith Residence",
     category: "Residential",
-    location: "Kensington, Melbourne",
-    year: "2025",
-    image: "/images/portfolio-1-monolith-residence.jpg",
-    width: 1200,
-    height: 1500,
+    location: "Colombo 07",
+    image: "/images/portfolio-1.webp",
+    width: 1600,
+    height: 2000,
     aspectRatio: "4/5",
     spanDesktop: "lg:col-span-7",
     isArchCropped: true,
+    isSample: true,
     synopsis:
-      "A monumental family residence sculpted in fluted limestone, brushed bronze joinery, and subterranean light courts.",
+      "A subterranean light court and monolithic fluted limestone volume framing secluded tropical courtyards.",
   },
   {
     id: "atelier-noir",
     title: "Atelier Noir",
     category: "Commercial",
-    location: "Le Marais, Paris",
-    year: "2024",
-    image: "/images/portfolio-2-atelier-noir.jpg",
-    width: 1500,
-    height: 1000,
-    aspectRatio: "3/2",
+    location: "Galle Fort",
+    image: "/images/portfolio-2.webp",
+    width: 1600,
+    height: 1200,
+    aspectRatio: "4/3",
     spanDesktop: "lg:col-span-5",
     isArchCropped: false,
+    isSample: true,
     synopsis:
-      "A high-jewelry private gallery characterized by blackened timber, raw silk acoustic panels, and precision spotlighting.",
+      "A bespoke high-jewellery private salon set within historic coral-stone ramparts, finished in blackened jackfruit timber and raw silk.",
   },
   {
     id: "solarium-villa",
     title: "Solarium Villa",
     category: "Residential",
-    location: "Deià, Mallorca",
-    year: "2024",
-    image: "/images/portfolio-3-solarium-villa.jpg",
-    width: 1200,
-    height: 1500,
-    aspectRatio: "4/5",
+    location: "Bentota",
+    image: "/images/portfolio-3.webp",
+    width: 1500,
+    height: 2000,
+    aspectRatio: "3/4",
     spanDesktop: "lg:col-span-5",
     isArchCropped: false,
+    isSample: true,
     synopsis:
-      "A terraced coastal sanctuary harmonizing hand-applied lime plaster, aged olive wood, and seamless indoor-outdoor vistas.",
+      "A coastal sanctuary merging hand-applied lime plaster, aged teak portals, and unhurried ocean breeze passages.",
   },
   {
-    id: "palazzo-minimal",
-    title: "Palazzo Minimal",
+    id: "stonebridge-apartment",
+    title: "Stonebridge Apartment",
     category: "Residential",
-    location: "Brera, Milan",
-    year: "2024",
-    image: "/images/portfolio-4-palazzo-minimal.jpg",
-    width: 1500,
-    height: 1000,
-    aspectRatio: "3/2",
+    location: "Colombo 03",
+    image: "/images/portfolio-4.webp",
+    width: 1600,
+    height: 1200,
+    aspectRatio: "4/3",
     spanDesktop: "lg:col-span-7",
     isArchCropped: true,
+    isSample: true,
     synopsis:
-      "A 19th-century noble apartment reimagined through deep espresso portals, monolithic travertine islands, and restored frescoes.",
+      "A sky-level residence centered on a sculpted monolithic travertine island, brushed bronze joints, and quiet city vistas.",
   },
   {
     id: "haven-penthouse",
     title: "Haven Penthouse",
     category: "Residential",
-    location: "Tribeca, New York",
-    year: "2023",
-    image: "/images/portfolio-5-haven-penthouse.jpg",
-    width: 1200,
-    height: 1500,
+    location: "Colombo 02",
+    image: "/images/portfolio-5.webp",
+    width: 1600,
+    height: 2000,
     aspectRatio: "4/5",
     spanDesktop: "lg:col-span-6",
     isArchCropped: true,
+    isSample: true,
     synopsis:
-      "An ethereal duplex loft wrapped in Belgian linen drapery, dark roast oak ceilings, and low-slung Italian seating.",
+      "A panoramic duplex wrapped in natural Belgian linen drapery, dark roast teak ceilings, and low-slung tactile upholstery.",
   },
   {
     id: "umbra-pavilion",
     title: "Umbra Pavilion",
     category: "Commercial",
-    location: "Higashiyama, Kyoto",
-    year: "2023",
-    image: "/images/portfolio-6-umbra-pavilion.jpg",
+    location: "Kandy",
+    image: "/images/portfolio-6.webp",
     width: 1500,
-    height: 1000,
-    aspectRatio: "3/2",
+    height: 2000,
+    aspectRatio: "3/4",
     spanDesktop: "lg:col-span-6",
     isArchCropped: false,
+    isSample: true,
     synopsis:
-      "An intimate tea lounge and boutique hotel lobby blending scorched cedar, honed granite, and subdued warm illumination.",
+      "An intimate highland tea lounge pairing scorched timber joinery, local graphite granite hearths, and subdued warm illumination.",
   },
 ];
-

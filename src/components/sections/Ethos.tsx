@@ -25,14 +25,14 @@ const pillars = [
   },
 ];
 
-export function Philosophy() {
+export function Ethos() {
   return (
     <section
-      id="philosophy"
-      className="relative bg-[#5A3A2A] text-[#F6E7D0] py-28 sm:py-36 px-6 sm:px-12 border-t border-[#E2C196]/20 overflow-hidden"
-      aria-label="Design Philosophy"
+      id="ethos"
+      className="relative bg-[#5A3A2A] text-[#F6E7D0] py-28 sm:py-36 px-6 sm:px-12 border-t border-[#E2C196]/20 overflow-hidden scroll-mt-24 sm:scroll-mt-28"
+      aria-label="Design Ethos"
     >
-      {/* Background low opacity watermark */}
+      {/* Decorative background low opacity watermark */}
       <div
         className="absolute bottom-0 right-0 w-[460px] h-[460px] opacity-[0.04] pointer-events-none select-none"
         aria-hidden="true"
@@ -107,4 +107,3 @@ export function Philosophy() {
     </section>
   );
 }
-

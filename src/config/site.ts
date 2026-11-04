@@ -6,29 +6,36 @@ export interface SiteConfig {
   url: string;
   ogImage: string;
   themeColor: string;
-  whatsApp: {
-    number: string;
-    isPlaceholder: boolean;
+  whatsappNumber: string;
+  isPlaceholderWhatsApp: boolean;
+  contact: {
+    email: string;
+    address: string;
+    hours: string;
   };
   navigation: Array<{
     label: string;
     href: string;
   }>;
-  contact: {
-    email: string;
-    studio: string;
-    city: string;
-    hours: string;
-  };
 }
 
 /**
- * Site configuration.
- * IMPORTANT: Replace WHATSAPP_NUMBER with your actual international phone number
- * format (e.g. "94771234567" without leading '+' or dashes).
+ * Placeholder format: international format without leading '+' or dashes.
+ * Replace with your actual WhatsApp phone number (e.g. "94771234567").
  */
-export const WHATSAPP_NUMBER_PLACEHOLDER: string = "94XXXXXXXXX";
-export const ACTUAL_WHATSAPP_NUMBER: string = "94XXXXXXXXX"; // Replace with your WhatsApp number
+export const WHATSAPP_PLACEHOLDER = "94XXXXXXXXX";
+export const ACTUAL_WHATSAPP_NUMBER: string = "94XXXXXXXXX";
+
+const isPlaceholder =
+  ACTUAL_WHATSAPP_NUMBER === WHATSAPP_PLACEHOLDER ||
+  ACTUAL_WHATSAPP_NUMBER.includes("X");
+
+// Dev-only console warning when WhatsApp number is still the placeholder
+if (typeof window !== "undefined" && process.env.NODE_ENV === "development" && isPlaceholder) {
+  console.warn(
+    "[VELOURA] WhatsApp number is still set to placeholder '94XXXXXXXXX'. Update `ACTUAL_WHATSAPP_NUMBER` in `src/config/site.ts` with your live number."
+  );
+}
 
 export const siteConfig: SiteConfig = {
   name: "VELOURA Interior Design Studio",
@@ -37,24 +44,20 @@ export const siteConfig: SiteConfig = {
   description:
     "An editorial interior design atelier crafting bespoke residential and commercial sanctuaries through timeless materiality, architectural restraint, and warm minimalism.",
   url: "https://veloura.pixbeelabs.com",
-  ogImage: "/images/hero.jpg",
+  ogImage: "/images/og-image.jpg",
   themeColor: "#24160F",
-  whatsApp: {
-    number: ACTUAL_WHATSAPP_NUMBER,
-    isPlaceholder:
-      ACTUAL_WHATSAPP_NUMBER === WHATSAPP_NUMBER_PLACEHOLDER ||
-      (ACTUAL_WHATSAPP_NUMBER as string).indexOf("X") !== -1,
+  whatsappNumber: ACTUAL_WHATSAPP_NUMBER,
+  isPlaceholderWhatsApp: isPlaceholder,
+  contact: {
+    email: "", // One source of truth: leave empty by default
+    address: "", // Leave empty by default
+    hours: "", // Leave empty by default
   },
   navigation: [
     { label: "Studio", href: "#studio" },
     { label: "Portfolio", href: "#portfolio" },
-    { label: "Philosophy", href: "#philosophy" },
+    { label: "Ethos", href: "#ethos" },
+    { label: "Process", href: "#process" },
     { label: "Enquiry", href: "#enquiry" },
   ],
-  contact: {
-    email: "atelier@veloura.pixbeelabs.com",
-    studio: "14 Ward Place, Cinnamon Gardens",
-    city: "Colombo 07, Sri Lanka",
-    hours: "Monday – Friday: By Appointment",
-  },
 };
