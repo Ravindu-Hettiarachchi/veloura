@@ -20,7 +20,7 @@ export function Footer() {
 
   return (
     <footer
-      className="relative bg-[#24160F] text-[#F6E7D0] pt-20 pb-12 px-6 sm:px-12 border-t border-[#E2C196]/20 overflow-hidden"
+      className="relative bg-[#1A100B] text-[#F6E7D0] pt-24 pb-12 px-6 sm:px-12 border-t border-[#E2C196]/20 overflow-hidden"
       aria-label="Footer"
     >
       {/* Arch Outline Divider Transition */}
@@ -47,7 +47,7 @@ export function Footer() {
           {/* Logo & Atelier Statement Column */}
           <div className="md:col-span-5 space-y-6">
             <Link
-              href="#top"
+              href="/"
               className="inline-block relative w-48 h-12 focus-visible:ring-2 focus-visible:ring-caramel rounded-sm"
               aria-label="VELOURA Home"
             >
@@ -62,7 +62,7 @@ export function Footer() {
 
             <p className="text-sm text-[#F6E7D0]/70 max-w-sm leading-relaxed font-sans font-light">
               An architectural interior atelier crafting spaces of quiet permanence.
-              Commissioning bespoke private residences and commercial galleries.
+              Commissioning bespoke private residences, hospitality retreats, and commercial galleries.
             </p>
 
             <div className="pt-2">
@@ -83,15 +83,23 @@ export function Footer() {
             <span className="text-[11px] uppercase tracking-[0.25em] text-[#E2C196] font-sans font-semibold block mb-4">
               Directory
             </span>
-            <ul className="space-y-2.5 text-xs uppercase tracking-[0.2em] font-sans">
+            <ul className="space-y-3 text-xs uppercase tracking-[0.2em] font-sans">
+              <li>
+                <Link
+                  href="/"
+                  className="text-[#F6E7D0]/70 hover:text-[#E2C196] transition-colors duration-300 focus-visible:ring-2 focus-visible:ring-caramel"
+                >
+                  Home
+                </Link>
+              </li>
               {siteConfig.navigation.map((item) => (
                 <li key={item.label}>
-                  <a
+                  <Link
                     href={item.href}
                     className="text-[#F6E7D0]/70 hover:text-[#E2C196] transition-colors duration-300 focus-visible:ring-2 focus-visible:ring-caramel"
                   >
                     {item.label}
-                  </a>
+                  </Link>
                 </li>
               ))}
             </ul>
@@ -122,15 +130,20 @@ export function Footer() {
                 )}
               </div>
             ) : (
-              <p className="text-xs text-[#F6E7D0]/60 font-sans leading-relaxed">
-                Consultations are arranged by private appointment via WhatsApp or direct enquiry.
-              </p>
+              <div className="space-y-3 text-xs text-[#F6E7D0]/60 font-sans leading-relaxed">
+                <p>
+                  Private consultations are scheduled by prior appointment.
+                </p>
+                <p className="text-[#E2C196]/80">
+                  Colombo Atelier · Sri Lanka
+                </p>
+              </div>
             )}
           </div>
         </div>
 
         {/* Thin Caramel Line */}
-        <div className="w-full h-[1px] bg-[#E2C196]/25" />
+        <div className="w-full h-[1px] bg-[#E2C196]/20" />
 
         {/* Bottom Copyright & Location Line */}
         <div className="pt-8 flex flex-col sm:flex-row items-center justify-between text-xs text-[#F6E7D0]/50 font-sans tracking-wide gap-4">

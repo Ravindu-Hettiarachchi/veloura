@@ -21,7 +21,7 @@ export interface SiteConfig {
 
 /**
  * Placeholder format: international format without leading '+' or dashes.
- * Replace with your actual WhatsApp phone number (e.g. "94771234567").
+ * Replace with your actual WhatsApp phone number (e.g. "94XXXXXXXXX").
  */
 export const WHATSAPP_PLACEHOLDER = "94XXXXXXXXX";
 export const ACTUAL_WHATSAPP_NUMBER: string = "94XXXXXXXXX";
@@ -40,7 +40,7 @@ if (typeof window !== "undefined" && process.env.NODE_ENV === "development" && i
 export const siteConfig: SiteConfig = {
   name: "VELOURA Interior Design Studio",
   shortName: "VELOURA",
-  tagline: "Architecture of Quiet Luxury",
+  tagline: "Atelier of Architectural Interiors",
   description:
     "An editorial interior design atelier crafting bespoke residential and commercial sanctuaries through timeless materiality, architectural restraint, and warm minimalism.",
   url: "https://veloura.pixbeelabs.com",
@@ -49,15 +49,14 @@ export const siteConfig: SiteConfig = {
   whatsappNumber: ACTUAL_WHATSAPP_NUMBER,
   isPlaceholderWhatsApp: isPlaceholder,
   contact: {
-    email: "", // One source of truth: leave empty by default
-    address: "", // Leave empty by default
-    hours: "", // Leave empty by default
+    email: "", // One source of truth: empty by default per instructions
+    address: "", // Empty by default
+    hours: "", // Empty by default
   },
   navigation: [
-    { label: "Studio", href: "#studio" },
-    { label: "Portfolio", href: "#portfolio" },
-    { label: "Ethos", href: "#ethos" },
-    { label: "Process", href: "#process" },
-    { label: "Enquiry", href: "#enquiry" },
+    { label: "Studio", href: "/studio" },
+    { label: "Portfolio", href: "/portfolio" },
+    { label: "Process", href: "/process" },
+    { label: "Enquiry", href: "/enquiry" },
   ],
 };
