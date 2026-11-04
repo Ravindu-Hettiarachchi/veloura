@@ -1,0 +1,130 @@
+"use client";
+
+import React from "react";
+import Image from "next/image";
+import Link from "next/link";
+import { siteConfig } from "@/config/site";
+import { ArchDivider } from "@/components/ui/ArchDivider";
+
+export function Footer() {
+  const currentYear = new Date().getFullYear();
+  const whatsappUrl = `https://wa.me/${siteConfig.whatsApp.number}?text=${encodeURIComponent(
+    "Hello VELOURA, I would like to schedule a private consultation."
+  )}`;
+
+  return (
+    <footer
+      className="relative bg-[#24160F] text-[#F6E7D0] pt-20 pb-12 px-6 sm:px-12 border-t border-[#E2C196]/20 overflow-hidden"
+      aria-label="Footer"
+    >
+      {/* Arch Outline Divider Transition */}
+      <div className="absolute top-0 inset-x-0 -translate-y-1/2 pointer-events-none">
+        <ArchDivider variant="dark" withPendant={false} />
+      </div>
+
+      {/* Low-opacity (4%) Oversized Emblem Watermark */}
+      <div
+        className="absolute -bottom-16 -right-16 w-96 sm:w-[500px] h-96 sm:h-[500px] opacity-[0.04] pointer-events-none select-none z-0"
+        aria-hidden="true"
+      >
+        <Image
+          src="/brand/veloura-icon-light.png"
+          alt=""
+          fill
+          sizes="500px"
+          className="object-contain"
+        />
+      </div>
+
+      <div className="relative z-10 max-w-7xl mx-auto">
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-12 lg:gap-16 pb-16">
+          {/* Logo & Manifesto Column */}
+          <div className="md:col-span-5 space-y-6">
+            <Link
+              href="#"
+              className="inline-block relative w-48 h-12 focus-visible:ring-2 focus-visible:ring-caramel rounded-sm"
+              aria-label="VELOURA Home"
+            >
+              <Image
+                src="/brand/veloura-logo-light-text.png"
+                alt="VELOURA"
+                fill
+                sizes="192px"
+                className="object-contain object-left"
+              />
+            </Link>
+
+            <p className="text-sm text-[#F6E7D0]/70 max-w-sm leading-relaxed font-sans font-light">
+              An architectural interior atelier crafting spaces of quiet permanence.
+              Based in Colombo, commissioning private residences and commercial galleries
+              internationally.
+            </p>
+
+            <div className="pt-2">
+              <a
+                href={whatsappUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center text-xs uppercase tracking-[0.2em] text-[#E2C196] hover:text-[#F6E7D0] transition-colors py-1 border-b border-[#E2C196]/40"
+              >
+                <span>Direct WhatsApp Inquiries</span>
+                <span className="ml-2">→</span>
+              </a>
+            </div>
+          </div>
+
+          {/* Navigation Links */}
+          <div className="md:col-span-3 space-y-4">
+            <span className="text-[11px] uppercase tracking-[0.25em] text-[#E2C196] font-sans font-semibold block mb-4">
+              Directory
+            </span>
+            <ul className="space-y-2.5 text-xs uppercase tracking-[0.2em] font-sans">
+              {siteConfig.navigation.map((item) => (
+                <li key={item.label}>
+                  <a
+                    href={item.href}
+                    className="text-[#F6E7D0]/70 hover:text-[#E2C196] transition-colors duration-300"
+                  >
+                    {item.label}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {/* Studio Info Column */}
+          <div className="md:col-span-4 space-y-4">
+            <span className="text-[11px] uppercase tracking-[0.25em] text-[#E2C196] font-sans font-semibold block mb-4">
+              Atelier Appointments
+            </span>
+            <p className="text-sm text-[#F6E7D0]/80 font-sans leading-relaxed">
+              {siteConfig.contact.studio}
+              <br />
+              {siteConfig.contact.city}
+            </p>
+            <p className="text-xs text-[#E2C196]/80 font-mono pt-1">
+              {siteConfig.contact.hours}
+            </p>
+            <p className="text-xs text-[#F6E7D0]/60 font-sans">
+              Inquiries: {siteConfig.contact.email}
+            </p>
+          </div>
+        </div>
+
+        {/* Thin Caramel Line */}
+        <div className="w-full h-[1px] bg-[#E2C196]/25" />
+
+        {/* Bottom Copyright & Legal */}
+        <div className="pt-8 flex flex-col sm:flex-row items-center justify-between text-xs text-[#F6E7D0]/50 font-sans tracking-wide gap-4">
+          <p>
+            © {currentYear} {siteConfig.name}. All rights reserved.
+          </p>
+
+          <p className="text-[11px] text-[#E2C196]/60">
+            Static Architectural Gallery · veloura.pixbeelabs.com
+          </p>
+        </div>
+      </div>
+    </footer>
+  );
+}
