@@ -2,6 +2,8 @@
 
 import React from "react";
 import Image from "next/image";
+import { m } from "framer-motion";
+import { EASE } from "@/lib/constants";
 import { FadeIn } from "@/components/motion/FadeIn";
 
 const pillars = [
@@ -10,18 +12,24 @@ const pillars = [
     title: "Material Honesty",
     subtitle: "Stone, Timber & Lime Plaster",
     desc: "We abstain from synthetic imitations. We specify quarried travertine, honest European oak, and breathable mineral plasters that register touch and patina with grace.",
+    image: "/images/ethos-1.webp",
+    alt: "Honed natural travertine stone and solid European oak surfaces",
   },
   {
     num: "02",
     title: "Quiet Volume",
     subtitle: "Spatial Breathing Room",
     desc: "Luxury is the confidence to leave space unburdened. We orchestrate architectural sightlines, ceiling heights, and recessed junctions to evoke instantaneous calm.",
+    image: "/images/ethos-2.webp",
+    alt: "Vaulted architectural volume with quiet daylight and refined proportions",
   },
   {
     num: "03",
     title: "Light as Matter",
     subtitle: "Shadows, Apertures & Warmth",
     desc: "We study solar trajectories across every season. Low-glare concealed illumination and deep window reveals sculpt shadow as an emotional medium.",
+    image: "/images/ethos-3.webp",
+    alt: "Chiaroscuro shadows and warm golden light cast across a minimalist interior wall",
   },
 ];
 
@@ -65,40 +73,66 @@ export function Ethos() {
           </p>
         </FadeIn>
 
-        {/* 3 Pillars Grid with Hairline Dividers */}
+        {/* 3 Pillars Grid with Aesthetic Inset Images */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-10 lg:gap-14">
           {pillars.map((pillar, idx) => (
             <FadeIn
               key={pillar.num}
               delay={idx * 0.15}
-              className="relative p-8 sm:p-10 rounded-sm border border-[#E2C196]/20 bg-[#24160F]/30 backdrop-blur-xs flex flex-col justify-between hover:border-[#E2C196]/50 transition-colors duration-500"
+              className="relative rounded-sm border border-[#E2C196]/20 bg-[#24160F]/40 backdrop-blur-xs flex flex-col justify-between overflow-hidden hover:border-[#E2C196]/50 transition-colors duration-500 shadow-lg group"
             >
-              <div>
-                <div className="flex items-baseline justify-between border-b border-[#E2C196]/20 pb-4 mb-6">
-                  <span className="font-serif text-3xl text-[#E2C196] font-light">
-                    {pillar.num}
-                  </span>
-                  <span className="text-[10px] uppercase tracking-[0.2em] text-[#E2C196]/70 font-sans">
-                    Tenet
-                  </span>
-                </div>
-
-                <h3 className="font-serif text-2xl text-[#F6E7D0] font-medium leading-snug">
-                  {pillar.title}
-                </h3>
-                <p className="text-xs uppercase tracking-[0.15em] text-[#E2C196]/80 font-sans mt-1">
-                  {pillar.subtitle}
-                </p>
-
-                <p className="mt-6 text-sm text-[#F6E7D0]/75 font-sans leading-relaxed font-light">
-                  {pillar.desc}
-                </p>
+              {/* Aesthetic Inset Image Banner */}
+              <div className="relative w-full aspect-[16/10] overflow-hidden bg-[#24160F] border-b border-[#E2C196]/15">
+                <m.div
+                  className="w-full h-full relative"
+                  whileHover={{ scale: 1.05 }}
+                  transition={{ duration: 0.8, ease: EASE }}
+                >
+                  <Image
+                    src={pillar.image}
+                    alt={pillar.alt}
+                    fill
+                    sizes="(max-width: 768px) 100vw, 33vw"
+                    className="object-cover object-center"
+                    loading="lazy"
+                    decoding="async"
+                  />
+                </m.div>
+                {/* Subtle vignette */}
+                <div
+                  className="absolute inset-0 bg-gradient-to-t from-[#24160F]/80 via-transparent to-transparent pointer-events-none"
+                  aria-hidden="true"
+                />
               </div>
 
-              {/* Bottom Hairline Detail */}
-              <div className="mt-8 pt-4 flex items-center justify-between text-[#E2C196]/50 text-[10px] font-mono">
-                <span>VELOURA · ATELIER</span>
-                <span className="w-6 h-[1px] bg-[#E2C196]/30" />
+              <div className="p-8 sm:p-10 flex flex-col justify-between flex-grow">
+                <div>
+                  <div className="flex items-baseline justify-between border-b border-[#E2C196]/20 pb-4 mb-6">
+                    <span className="font-serif text-3xl text-[#E2C196] font-light">
+                      {pillar.num}
+                    </span>
+                    <span className="text-[10px] uppercase tracking-[0.2em] text-[#E2C196]/70 font-sans">
+                      Tenet
+                    </span>
+                  </div>
+
+                  <h3 className="font-serif text-2xl text-[#F6E7D0] font-medium leading-snug">
+                    {pillar.title}
+                  </h3>
+                  <p className="text-xs uppercase tracking-[0.15em] text-[#E2C196]/80 font-sans mt-1">
+                    {pillar.subtitle}
+                  </p>
+
+                  <p className="mt-6 text-sm text-[#F6E7D0]/75 font-sans leading-relaxed font-light">
+                    {pillar.desc}
+                  </p>
+                </div>
+
+                {/* Bottom Hairline Detail */}
+                <div className="mt-8 pt-4 flex items-center justify-between text-[#E2C196]/50 text-[10px] font-mono">
+                  <span>VELOURA · ATELIER</span>
+                  <span className="w-6 h-[1px] bg-[#E2C196]/30" />
+                </div>
               </div>
             </FadeIn>
           ))}

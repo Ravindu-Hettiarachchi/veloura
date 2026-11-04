@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import Image from "next/image";
 import { m } from "framer-motion";
 import { EASE } from "@/lib/constants";
 import { FadeIn } from "@/components/motion/FadeIn";
@@ -10,21 +11,29 @@ const steps = [
     num: "01",
     title: "Consultation",
     desc: "An intimate dialogue exploring spatial rituals, natural daylight paths, and the unrepeatable character of your site.",
+    image: "/images/process-1.webp",
+    alt: "Architectural consultation dialogue exploring spatial layout and site character",
   },
   {
     num: "02",
     title: "Concept & Mood",
     desc: "Rigorous curation of tactile material palettes, volume studies, and axial sightlines before pencil meets paper.",
+    image: "/images/process-2.webp",
+    alt: "Tactile curation of travertine stone swatches, timber grains, and linen textures",
   },
   {
     num: "03",
     title: "Detailing",
     desc: "Exacting architectural documentation, bespoke joinery engineering, and hand-selected stone quarry provenance.",
+    image: "/images/process-3.webp",
+    alt: "Precision joinery detailing and bespoke architectural stonework craftsmanship",
   },
   {
     num: "04",
     title: "Delivery & Styling",
     desc: "On-site master masonry supervision, artisanal lighting calibration, textile draping, and private sensory handover.",
+    image: "/images/process-4.webp",
+    alt: "Finished sanctuary interior styled with low-glare lighting and natural textures",
   },
 ];
 
@@ -56,8 +65,8 @@ export function Process() {
 
         {/* Steps Grid with Connecting 1px Line */}
         <div className="relative">
-          {/* Desktop Connecting 1px Line (SVG pathLength 0 -> 1, 1.6s, EASE) */}
-          <div className="hidden lg:block absolute top-[52px] left-[12%] right-[12%] pointer-events-none z-0">
+          {/* Desktop Connecting 1px Line */}
+          <div className="hidden lg:block absolute top-[44px] left-[10%] right-[10%] pointer-events-none z-0">
             <svg
               viewBox="0 0 1000 2"
               fill="none"
@@ -71,7 +80,7 @@ export function Process() {
                 y2="1"
                 stroke="#E2C196"
                 strokeWidth="1"
-                strokeOpacity="0.35"
+                strokeOpacity="0.3"
                 initial={{ pathLength: 0 }}
                 whileInView={{ pathLength: 1 }}
                 viewport={{ once: true, amount: 0.3 }}
@@ -87,17 +96,15 @@ export function Process() {
                 delay={idx * 0.15}
                 className="flex flex-col items-center text-center group"
               >
-                {/* Arch Outline Marker */}
-                <div className="relative w-24 h-28 flex flex-col items-center justify-between mb-8">
-                  {/* Small Arch SVG Marker */}
+                {/* Arch Outline Marker with Step Number */}
+                <div className="relative w-20 h-22 flex flex-col items-center justify-between mb-6">
                   <svg
-                    viewBox="0 0 64 80"
+                    viewBox="0 0 64 74"
                     fill="none"
-                    className="w-16 h-20 text-[#E2C196]"
+                    className="w-14 h-16 text-[#E2C196]"
                   >
-                    {/* Arch outline */}
                     <m.path
-                      d="M2,78 L2,32 Q2,2 32,2 Q62,2 62,32 L62,78 Z"
+                      d="M2,72 L2,30 Q2,2 32,2 Q62,2 62,30 L62,72 Z"
                       stroke="currentColor"
                       strokeWidth="1.25"
                       strokeOpacity="0.5"
@@ -107,11 +114,10 @@ export function Process() {
                       viewport={{ once: true, amount: 0.4 }}
                       transition={{ duration: 1.6, ease: EASE, delay: idx * 0.15 }}
                     />
-                    {/* Center pendant dot */}
                     <m.circle
                       cx="32"
-                      cy="36"
-                      r="3.5"
+                      cy="32"
+                      r="3"
                       fill="currentColor"
                       initial={{ opacity: 0 }}
                       whileInView={{ opacity: 1 }}
@@ -120,17 +126,41 @@ export function Process() {
                     />
                   </svg>
 
-                  {/* Step Number in Cormorant */}
-                  <span className="font-serif text-lg text-[#E2C196] font-medium tracking-wider">
+                  <span className="font-serif text-base text-[#E2C196] font-medium tracking-wider">
                     {step.num}
                   </span>
+                </div>
+
+                {/* Arch-Cropped Aesthetic Step Image */}
+                <div className="relative w-full aspect-[4/5] max-w-[240px] rounded-t-[80px] rounded-b-sm overflow-hidden border border-[#E2C196]/25 bg-[#5A3A2A] mb-6 shadow-md">
+                  <m.div
+                    className="w-full h-full relative"
+                    whileHover={{ scale: 1.05 }}
+                    transition={{ duration: 0.8, ease: EASE }}
+                  >
+                    <Image
+                      src={step.image}
+                      alt={step.alt}
+                      fill
+                      sizes="(max-width: 768px) 240px, 20vw"
+                      className="object-cover object-center"
+                      loading="lazy"
+                      decoding="async"
+                    />
+                  </m.div>
+
+                  {/* Subtle inner hairline arch */}
+                  <div
+                    className="absolute inset-2 rounded-t-[72px] rounded-b-xs border border-[#E2C196]/20 pointer-events-none"
+                    aria-hidden="true"
+                  />
                 </div>
 
                 <h3 className="font-serif text-2xl text-[#F6E7D0] font-medium leading-snug">
                   {step.title}
                 </h3>
 
-                <p className="mt-3.5 text-xs sm:text-sm text-[#F6E7D0]/70 font-sans font-light leading-relaxed max-w-xs">
+                <p className="mt-3 text-xs sm:text-sm text-[#F6E7D0]/70 font-sans font-light leading-relaxed max-w-xs">
                   {step.desc}
                 </p>
 
