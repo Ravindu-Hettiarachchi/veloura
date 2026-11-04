@@ -2,39 +2,36 @@
 
 @layer base {
   :root {
-    --espresso: #140d08;
-    --espresso-deep: #1a100b;
-    --mocha: #3d2417;
-    --dark-roast: #2c1a11;
-    --latte: #f3eae0;
+    --latte: #f2e8dc;
     --cream: #f6e7d0;
+    --espresso: #24160f;
+    --mocha: #5a3a2a;
+    --dark-roast: #3b2417;
     --copper: #b07a4f;
     --caramel: #e2c196;
-    --caramel-muted: #c9a87d;
   }
 
   html {
     scroll-behavior: smooth;
-    color-scheme: dark light;
-    background-color: var(--espresso);
-    color: var(--cream);
-    font-family: var(--font-tenor), "Tenor Sans", -apple-system, BlinkMacSystemFont, sans-serif;
+    color-scheme: light dark;
+    background-color: var(--latte);
+    color: var(--dark-roast);
+    font-family: var(--font-jost), "Jost", -apple-system, BlinkMacSystemFont, sans-serif;
   }
 
   body {
-    background-color: var(--espresso);
-    color: var(--cream);
+    background-color: var(--latte);
+    color: var(--dark-roast);
     overflow-x: hidden;
-    font-size: clamp(0.9375rem, 0.9rem + 0.2vw, 1.0625rem);
-    line-height: 1.8;
-    letter-spacing: 0.015em;
+    font-size: clamp(1rem, 0.95rem + 0.25vw, 1.125rem);
+    line-height: 1.75;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }
 
-  /* Accessible Gold Focus Rings */
+  /* Accessible focus rings */
   *:focus-visible {
-    outline: 2px solid var(--caramel) !important;
+    outline: 2px solid var(--copper) !important;
     outline-offset: 3px !important;
   }
 
@@ -45,71 +42,55 @@
 }
 
 @theme {
-  --color-espresso: #140d08;
-  --color-espresso-deep: #1a100b;
-  --color-mocha: #3d2417;
-  --color-dark-roast: #2c1a11;
-  --color-latte: #f3eae0;
+  --color-latte: #f2e8dc;
   --color-cream: #f6e7d0;
+  --color-espresso: #24160f;
+  --color-mocha: #5a3a2a;
+  --color-dark-roast: #3b2417;
   --color-copper: #b07a4f;
   --color-caramel: #e2c196;
-  --color-caramel-muted: #c9a87d;
 
-  --font-serif: var(--font-bodoni), "Bodoni Moda", Didot, "Bodoni MT", serif;
-  --font-italic-serif: var(--font-instrument), "Instrument Serif", Georgia, serif;
-  --font-sans: var(--font-tenor), "Tenor Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --font-serif: var(--font-cormorant), "Cormorant Garamond", Georgia, serif;
+  --font-sans: var(--font-jost), "Jost", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
 }
 
-/* Haute Couture Editorial Typography Utilities */
-.heading-monograph {
+/* Fluid Cormorant Garamond Headings */
+.heading-hero {
   font-family: var(--font-serif);
-  font-size: clamp(2.75rem, 1.8rem + 4.5vw, 6.5rem);
-  line-height: 0.98;
-  letter-spacing: -0.02em;
-  font-weight: 400;
-}
-
-.heading-display {
-  font-family: var(--font-serif);
-  font-size: clamp(2.25rem, 1.5rem + 3.2vw, 5rem);
+  font-size: clamp(2.5rem, 1.8rem + 3.8vw, 5.25rem);
   line-height: 1.05;
   letter-spacing: -0.015em;
-  font-weight: 400;
+  font-weight: 500;
 }
 
 .heading-section {
   font-family: var(--font-serif);
-  font-size: clamp(1.85rem, 1.4rem + 2vw, 3.5rem);
-  line-height: 1.1;
+  font-size: clamp(2rem, 1.5rem + 2.5vw, 3.75rem);
+  line-height: 1.12;
   letter-spacing: -0.01em;
-  font-weight: 400;
+  font-weight: 500;
 }
 
-.font-editorial-italic {
-  font-family: var(--font-italic-serif);
-  font-style: italic;
-  font-weight: 400;
-  letter-spacing: 0.01em;
+.heading-card {
+  font-family: var(--font-serif);
+  font-size: clamp(1.35rem, 1.1rem + 1vw, 2rem);
+  line-height: 1.2;
+  font-weight: 500;
 }
 
-.label-caps {
+/* Strictly the only two tracked uppercase styles allowed on the site */
+.nav-caps {
   font-family: var(--font-sans);
   text-transform: uppercase;
-  letter-spacing: 0.28em;
-  font-size: 0.6875rem;
-  font-weight: 400;
+  letter-spacing: 0.2em;
+  font-size: 0.75rem;
+  font-weight: 500;
 }
 
-.hairline-caramel {
-  border-color: rgba(226, 193, 150, 0.18);
-}
-
-.hairline-copper {
-  border-color: rgba(176, 122, 79, 0.25);
-}
-
-/* Subtle Film Grain Noise Texture (Optional Pure CSS) */
-.editorial-canvas {
-  background-image: radial-gradient(rgba(226, 193, 150, 0.04) 1px, transparent 0);
-  background-size: 32px 32px;
+.btn-caps {
+  font-family: var(--font-sans);
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  font-size: 0.8125rem;
+  font-weight: 500;
 }

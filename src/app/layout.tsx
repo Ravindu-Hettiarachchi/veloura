@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { Bodoni_Moda, Instrument_Serif, Tenor_Sans } from "next/font/google";
+import { Cormorant_Garamond, Jost } from "next/font/google";
 import "./globals.css";
 import { siteConfig } from "@/config/site";
 import { MotionProvider } from "@/components/motion/MotionProvider";
@@ -7,31 +7,23 @@ import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { FloatingWhatsApp } from "@/components/ui/FloatingWhatsApp";
 
-const bodoni = Bodoni_Moda({
+const cormorant = Cormorant_Garamond({
   subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
+  weight: ["400", "500", "600"],
   style: ["normal", "italic"],
-  variable: "--font-bodoni",
+  variable: "--font-cormorant",
   display: "swap",
 });
 
-const instrument = Instrument_Serif({
+const jost = Jost({
   subsets: ["latin"],
-  weight: ["400"],
-  style: ["normal", "italic"],
-  variable: "--font-instrument",
-  display: "swap",
-});
-
-const tenor = Tenor_Sans({
-  subsets: ["latin"],
-  weight: ["400"],
-  variable: "--font-tenor",
+  weight: ["300", "400", "500", "600"],
+  variable: "--font-jost",
   display: "swap",
 });
 
 export const viewport: Viewport = {
-  themeColor: "#140D08",
+  themeColor: "#F2E8DC",
   width: "device-width",
   initialScale: 1,
 };
@@ -39,25 +31,22 @@ export const viewport: Viewport = {
 export const metadata: Metadata = {
   metadataBase: new URL(siteConfig.url),
   title: {
-    default: `${siteConfig.shortName} — Architectural Interior Atelier`,
+    default: `${siteConfig.shortName} — Interior Design Studio`,
     template: `%s | ${siteConfig.shortName}`,
   },
   description: siteConfig.description,
   keywords: [
     "interior design studio",
-    "luxury interior design",
-    "architectural atelier",
-    "minimalist interior",
-    "curated spaces",
-    "bespoke residences",
-    "editorial interior",
-    "Colombo interior design",
-    "Sri Lanka architecture",
+    "interior design Sri Lanka",
+    "Colombo interior designer",
+    "home renovation Colombo",
+    "custom furniture Colombo",
+    "residential interior design",
   ],
-  authors: [{ name: "VELOURA Atelier" }],
+  authors: [{ name: "VELOURA" }],
   creator: "VELOURA",
   openGraph: {
-    title: `${siteConfig.shortName} — Architectural Interior Atelier`,
+    title: `${siteConfig.shortName} — Interior Design Studio`,
     description: siteConfig.description,
     url: siteConfig.url,
     siteName: siteConfig.name,
@@ -66,7 +55,7 @@ export const metadata: Metadata = {
         url: "/images/og-image.jpg",
         width: 1200,
         height: 630,
-        alt: "VELOURA Interior Design Studio Architectural Gallery",
+        alt: "VELOURA Interior Design Studio Colombo",
       },
     ],
     locale: "en_US",
@@ -74,7 +63,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: `${siteConfig.shortName} — Architectural Interior Atelier`,
+    title: `${siteConfig.shortName} — Interior Design Studio`,
     description: siteConfig.description,
     images: ["/images/og-image.jpg"],
   },
@@ -92,17 +81,17 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${bodoni.variable} ${instrument.variable} ${tenor.variable} scroll-smooth`}
+      className={`${cormorant.variable} ${jost.variable} scroll-smooth`}
     >
       <head>
         <link rel="icon" href="/icon.png" type="image/png" sizes="512x512" />
         <link rel="apple-touch-icon" href="/apple-icon.png" sizes="180x180" />
       </head>
-      <body className="bg-[#140D08] text-[#F6E7D0] selection:bg-[#E2C196] selection:text-[#140D08] antialiased min-h-screen flex flex-col font-sans">
+      <body className="bg-[#F2E8DC] text-[#3B2417] selection:bg-[#E2C196] selection:text-[#24160F] antialiased min-h-screen flex flex-col font-sans">
         {/* Semantic Accessible Skip Link */}
         <a
           href="#main-content"
-          className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[100] focus:px-5 focus:py-2.5 focus:bg-[#E2C196] focus:text-[#140D08] focus:font-medium focus:text-xs focus:uppercase focus:tracking-[0.2em] focus:rounded-sm focus:shadow-xl focus:outline-none focus:ring-2 focus:ring-[#F6E7D0]"
+          className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[100] focus:px-5 focus:py-2.5 focus:bg-[#3B2417] focus:text-[#F6E7D0] focus:font-medium focus:text-xs focus:uppercase focus:tracking-[0.2em] focus:rounded-sm focus:shadow-xl focus:outline-none focus:ring-2 focus:ring-[#E2C196]"
         >
           Skip to main content
         </a>

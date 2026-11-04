@@ -4,155 +4,92 @@ import React from "react";
 import Image from "next/image";
 import { m } from "framer-motion";
 import { EASE } from "@/lib/constants";
-import { FadeIn } from "@/components/motion/FadeIn";
 
 export function Studio() {
   return (
     <section
       id="studio"
-      className="relative bg-[#F2E8DC] text-[#3B2417] py-28 sm:py-36 px-6 sm:px-12 overflow-hidden scroll-mt-24 sm:scroll-mt-28"
-      aria-label="About the Studio"
+      className="relative w-full bg-[#F6E7D0] text-[#3B2417] py-28 sm:py-36 px-6 sm:px-10 lg:px-14 scroll-mt-24 border-t border-[#B07A4F]/20"
     >
-      {/* Decorative Low-opacity (5%) Emblem Watermark */}
-      <div
-        className="absolute top-1/2 -left-24 sm:-left-32 -translate-y-1/2 w-[480px] sm:w-[680px] h-[580px] sm:h-[780px] opacity-[0.05] pointer-events-none select-none z-0"
-        aria-hidden="true"
-      >
-        <Image
-          src="/brand/veloura-icon-dark.png"
-          alt=""
-          fill
-          sizes="(max-width: 768px) 480px, 680px"
-          className="object-contain"
-        />
-      </div>
-
-      <div className="relative z-10 max-w-7xl mx-auto">
-        {/* Section Header Tag */}
-        <FadeIn className="mb-14 sm:mb-20">
-          <div className="flex items-center space-x-3 text-[#B07A4F]">
-            <span className="text-xs uppercase tracking-[0.25em] font-sans font-semibold">
-              01 / The Studio
+      <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center">
+        {/* Left Column: Philosophy & Story */}
+        <div className="lg:col-span-6 space-y-6 sm:space-y-8">
+          <m.div
+            initial={{ opacity: 0, y: 28 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, amount: 0.25 }}
+            transition={{ duration: 1.2, ease: EASE }}
+            className="space-y-4"
+          >
+            <span className="nav-caps text-[#B07A4F] block">
+              The studio
             </span>
-            <div className="w-16 h-[1px] bg-[#B07A4F]/40" />
-          </div>
-        </FadeIn>
 
-        {/* 12-Column Split Screen Editorial Layout */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center">
-          {/* Left Column: Dark-Roast Philosophy Text */}
-          <div className="lg:col-span-5 flex flex-col justify-center">
-            <FadeIn delay={0.1}>
-              <h2 className="font-serif text-3xl sm:text-5xl lg:text-5xl font-medium text-[#3B2417] leading-[1.15] tracking-tight">
-                Architecture conceived through stillness, crafted for longevity.
-              </h2>
-            </FadeIn>
+            <h2 className="heading-section text-[#3B2417] text-balance">
+              A design practice grounded in everyday life.
+            </h2>
+          </m.div>
 
-            <FadeIn delay={0.25} className="mt-8 space-y-6 text-[#3B2417]/85 font-sans leading-[1.8] text-base sm:text-lg">
-              <p>
-                At VELOURA, we believe luxury is found not in superfluous ornamentation,
-                but in the deliberate restraint of space. We treat volume, shadow,
-                and daylight as primary architectural materials.
-              </p>
-              <p>
-                Each commission begins with the intrinsic character of the site.
-                From hand-quarried travertine and smoked French oak to custom forged
-                bronze hardware, our materials are selected for how gracefully they age
-                over decades of living.
-              </p>
-            </FadeIn>
+          <m.div
+            initial={{ opacity: 0, y: 24 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, amount: 0.25 }}
+            transition={{ delay: 0.15, duration: 1.2, ease: EASE }}
+            className="space-y-5 text-base sm:text-lg text-[#3B2417]/85 font-normal leading-relaxed"
+          >
+            <p>
+              Based in Colombo, VELOURA is an interior design studio led by architects and makers.
+              We believe the best interiors are not staged for photos, but shaped around the way people
+              actually wake up, cook, read, and gather.
+            </p>
+            <p>
+              Our work pairs Sri Lankan craft traditions—hand-turned timber, local stone carving, and loom-woven
+              textiles—with clean lines and generous natural light. We design spaces that feel quietly
+              confident from day one, and continue to settle comfortably over the years.
+            </p>
+          </m.div>
 
-            {/* Architectural Studio Pillars */}
-            <FadeIn delay={0.35} className="mt-10 pt-8 border-t border-[#B07A4F]/30 grid grid-cols-2 gap-6">
-              <div>
-                <span className="block font-serif text-2xl sm:text-3xl font-medium text-[#3B2417]">
-                  Spatial Purity
-                </span>
-                <span className="block mt-1 text-xs uppercase tracking-[0.2em] text-[#B07A4F] font-sans">
-                  Honest Volumes
-                </span>
-              </div>
-              <div>
-                <span className="block font-serif text-2xl sm:text-3xl font-medium text-[#3B2417]">
-                  Noble Craft
-                </span>
-                <span className="block mt-1 text-xs uppercase tracking-[0.2em] text-[#B07A4F] font-sans">
-                  Tactile Permanence
-                </span>
-              </div>
-            </FadeIn>
+          {/* Simple Studio Metrics / Real Facts */}
+          <m.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, amount: 0.25 }}
+            transition={{ delay: 0.3, duration: 1.2, ease: EASE }}
+            className="pt-4 border-t border-[#B07A4F]/20 grid grid-cols-2 gap-6 text-[#3B2417]"
+          >
+            <div>
+              <span className="block text-2xl font-serif text-[#3B2417]">Colombo 07</span>
+              <span className="text-xs text-[#3B2417]/70 font-normal">Our primary studio location</span>
+            </div>
+            <div>
+              <span className="block text-2xl font-serif text-[#3B2417]">Island-wide</span>
+              <span className="text-xs text-[#3B2417]/70 font-normal">Homes and boutique spaces</span>
+            </div>
+          </m.div>
+        </div>
 
-            {/* Director Signoff */}
-            <FadeIn delay={0.45} className="mt-10">
-              <div className="flex items-center space-x-4">
-                <div className="w-8 h-[1px] bg-[#B07A4F]" />
-                <span className="font-serif italic text-lg sm:text-xl text-[#3B2417]/90">
-                  Veloura Architectural Atelier
-                </span>
-              </div>
-            </FadeIn>
+        {/* Right Column: Split Screen Arch Imagery */}
+        <div className="lg:col-span-6 relative flex justify-center lg:justify-end">
+          {/* Primary Arch Container */}
+          <div className="relative w-full max-w-md h-[460px] sm:h-[560px] rounded-t-[200px] overflow-hidden border border-[#B07A4F]/30 shadow-lg bg-[#F2E8DC]">
+            <Image
+              src="/images/studio-primary.webp"
+              alt="Plaster wall with arched niche and ceramic vessel in a VELOURA designed interior"
+              fill
+              sizes="(max-width: 1024px) 100vw, 420px"
+              className="object-cover"
+            />
           </div>
 
-          {/* Right Column: Tall Arch-Cropped Image with Overlapping Second Image */}
-          <div className="lg:col-span-7 relative">
-            <FadeIn delay={0.2} className="relative z-10">
-              {/* Primary Tall Arch-Cropped Container */}
-              <div className="group relative w-full aspect-[4/5] max-w-[520px] mx-auto lg:ml-auto rounded-t-[140px] sm:rounded-t-[220px] rounded-b-none overflow-hidden border border-[#B07A4F]/35 shadow-xl bg-[#5A3A2A]">
-                <m.div
-                  className="w-full h-full relative"
-                  whileHover={{ scale: 1.05 }}
-                  transition={{ duration: 0.8, ease: EASE }}
-                >
-                  <Image
-                    src="/images/studio-primary.webp"
-                    alt="Tall arched opening in a plaster wall with soft shadow gradient and sculptural ceramic vase"
-                    fill
-                    sizes="(max-width: 1024px) 90vw, 520px"
-                    className="object-cover object-center"
-                    loading="lazy"
-                    decoding="async"
-                  />
-                </m.div>
-
-                {/* Subtle Hairline Arch Inset Accent */}
-                <div
-                  className="absolute inset-2 sm:inset-3 rounded-t-[130px] sm:rounded-t-[208px] rounded-b-none border border-[#B07A4F]/25 pointer-events-none"
-                  aria-hidden="true"
-                />
-              </div>
-
-              {/* Smaller Overlapping Second Image */}
-              <m.div
-                initial={{ opacity: 0, y: 32 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, amount: 0.3 }}
-                transition={{ duration: 1.2, ease: EASE, delay: 0.4 }}
-                className="group relative z-20 w-48 sm:w-72 aspect-square -mt-20 sm:-mt-28 ml-4 sm:ml-8 rounded-sm overflow-hidden border border-[#B07A4F]/40 shadow-2xl bg-[#5A3A2A]"
-              >
-                <m.div
-                  className="w-full h-full relative"
-                  whileHover={{ scale: 1.05 }}
-                  transition={{ duration: 0.8, ease: EASE }}
-                >
-                  <Image
-                    src="/images/studio-detail.webp"
-                    alt="Bronze handle detail on smoked oak joinery beside a honed stone edge"
-                    fill
-                    sizes="(max-width: 640px) 192px, 288px"
-                    className="object-cover object-center"
-                    loading="lazy"
-                    decoding="async"
-                  />
-                </m.div>
-
-                {/* Editorial image label */}
-                <div className="absolute bottom-0 inset-x-0 p-3 bg-gradient-to-t from-[#24160F]/85 to-transparent text-[#F6E7D0]">
-                  <p className="text-[10px] uppercase tracking-[0.2em] font-sans">
-                    Detail · Honed Stone &amp; Bronze
-                  </p>
-                </div>
-              </m.div>
-            </FadeIn>
+          {/* Smaller Overlapping Arch Detail Image */}
+          <div className="hidden sm:block absolute -bottom-8 -left-4 sm:left-4 lg:-left-6 w-52 h-52 rounded-t-[100px] overflow-hidden border border-[#B07A4F]/40 shadow-xl z-20 bg-[#F6E7D0]">
+            <Image
+              src="/images/studio-detail.webp"
+              alt="Smoked timber cabinet meeting smooth stone and bronze hardware"
+              fill
+              sizes="208px"
+              className="object-cover"
+            />
           </div>
         </div>
       </div>

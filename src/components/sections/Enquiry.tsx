@@ -2,28 +2,15 @@
 
 import React, { useState } from "react";
 import { siteConfig } from "@/config/site";
-import { FadeIn } from "@/components/motion/FadeIn";
 
-type ProjectType = "Residential" | "Commercial";
-type ServiceType =
-  | "Full interior design"
-  | "Renovation"
-  | "Styling"
-  | "Furniture and lighting";
-type TimelineType =
-  | "As soon as possible"
-  | "1–3 months"
-  | "3–6 months"
-  | "Just exploring";
-
-const SERVICES: ServiceType[] = [
+const serviceChips = [
   "Full interior design",
   "Renovation",
   "Styling",
   "Furniture and lighting",
 ];
 
-const TIMELINES: TimelineType[] = [
+const timelineChips = [
   "As soon as possible",
   "1–3 months",
   "3–6 months",
@@ -31,78 +18,83 @@ const TIMELINES: TimelineType[] = [
 ];
 
 export function Enquiry() {
-  // Fix: Do not pre-select any type, service or timeline
-  const [projectType, setProjectType] = useState<ProjectType | null>(null);
-  const [selectedServices, setSelectedServices] = useState<ServiceType[]>([]);
-  const [timeline, setTimeline] = useState<TimelineType | "">("");
-  const [clientName, setClientName] = useState("");
+  const [projectType, setProjectType] = useState<string>("");
+  const [services, setServices] = useState<string[]>([]);
+  const [timeline, setTimeline] = useState<string>("");
+  const [name, setName] = useState<string>("");
 
-  const toggleService = (service: ServiceType) => {
-    setSelectedServices((prev) =>
-      prev.includes(service) ? prev.filter((s) => s !== service) : [...prev, service]
+  const toggleService = (s: string) => {
+    setServices((prev) =>
+      prev.includes(s) ? prev.filter((item) => item !== s) : [...prev, s]
     );
   };
 
-  // Build message strictly from what the visitor chose, omit Name if empty
-  const buildMessage = () => {
-    if (!projectType) return "";
-    let msg = `Hello VELOURA, I'm interested in a ${projectType} project.`;
-    if (selectedServices.length > 0) {
-      msg += ` Service: ${selectedServices.join(", ")}.`;
+  const isSubmitDisabled = !projectType;
+
+  // Build the message strictly from chosen values
+  const constructMessage = () => {
+    let msg = `Hello VELOURA, I would like to enquire about an interior project.`;
+
+    if (projectType) {
+      msg += `\n\nProject type: ${projectType}`;
     }
+
+    if (services.length > 0) {
+      msg += `\nServices: ${services.join(", ")}`;
+    }
+
     if (timeline) {
-      msg += ` Timeline: ${timeline}.`;
+      msg += `\nTimeline: ${timeline}`;
     }
-    if (clientName.trim()) {
-      msg += ` Name: ${clientName.trim()}.`;
+
+    if (name.trim()) {
+      msg += `\nName: ${name.trim()}`;
     }
-    return msg;
+
+    return encodeURIComponent(msg);
   };
 
-  const messageText = buildMessage();
-  const whatsappUrl = projectType
-    ? `https://wa.me/${siteConfig.whatsappNumber}?text=${encodeURIComponent(messageText)}`
-    : "#";
+  const whatsappUrl = `https://wa.me/${siteConfig.whatsappNumber}?text=${constructMessage()}`;
+
+  const hasContactDetails = Boolean(
+    siteConfig.contact.address ||
+      siteConfig.contact.email ||
+      siteConfig.contact.hours
+  );
 
   return (
     <section
       id="enquiry"
-      className="relative bg-[#F2E8DC] text-[#3B2417] py-28 sm:py-36 px-6 sm:px-12 border-t border-[#B07A4F]/25 scroll-mt-24 sm:scroll-mt-28 overflow-hidden"
-      aria-label="Commission an Enquiry"
+      className="relative w-full bg-[#F6E7D0] text-[#3B2417] py-28 sm:py-36 px-6 sm:px-10 lg:px-14 scroll-mt-24 border-t border-[#B07A4F]/20"
     >
-      <div className="max-w-4xl mx-auto">
-        {/* Section Header */}
-        <FadeIn className="text-center mb-16 sm:mb-20">
-          <div className="inline-flex items-center space-x-3 text-[#B07A4F] mb-4">
-            <span className="w-8 h-[1px] bg-[#B07A4F]/40" />
-            <span className="text-xs uppercase tracking-[0.25em] font-sans font-semibold">
-              05 / Studio Commission
-            </span>
-            <span className="w-8 h-[1px] bg-[#B07A4F]/40" />
-          </div>
-
-          <h2 className="font-serif text-3xl sm:text-5xl font-medium tracking-tight text-[#3B2417] leading-tight">
-            Initiate a Private Dialogue
+      <div className="max-w-4xl mx-auto space-y-14">
+        {/* Header */}
+        <div className="space-y-4 text-center max-w-xl mx-auto">
+          <span className="nav-caps text-[#B07A4F] block">
+            Start a project
+          </span>
+          <h2 className="heading-section text-[#3B2417]">
+            Start a conversation
           </h2>
-          <p className="mt-4 text-[#3B2417]/80 font-sans text-base sm:text-lg max-w-xl mx-auto font-light leading-relaxed">
-            Specify the scope of your commission below. Your selections formulate
-            a direct WhatsApp enquiry to our principal design desk.
+          <p className="text-base sm:text-lg text-[#3B2417]/80 font-normal leading-relaxed">
+            Tell us a little about your space. We will respond within one business day.
           </p>
-        </FadeIn>
+        </div>
 
-        {/* Step-by-Step Card Interface */}
-        <div className="bg-[#FAF4EC] border border-[#B07A4F]/35 rounded-sm p-6 sm:p-12 shadow-sm space-y-12">
-          {/* Step 1: Project Classification (Required to enable button) */}
-          <fieldset>
-            <legend className="text-xs uppercase tracking-[0.2em] font-sans font-semibold text-[#B07A4F] mb-4 block">
-              Step 01 · Project Classification <span className="text-[#3B2417] font-normal">(Select one to begin)</span>
-            </legend>
+        {/* Step-by-Step Form Container */}
+        <div className="bg-[#F2E8DC] border border-[#B07A4F]/25 p-8 sm:p-12 rounded-sm shadow-md space-y-10">
+          {/* Step 1: Residential vs Commercial */}
+          <div className="space-y-3">
+            <span className="text-sm font-semibold text-[#3B2417] block">
+              1. What type of project is this? <span className="text-red-700">*</span>
+            </span>
+
             <div
-              className="grid grid-cols-1 sm:grid-cols-2 gap-4"
               role="radiogroup"
-              aria-label="Project Classification"
+              aria-label="Project Type"
+              className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-1"
             >
-              {(["Residential", "Commercial"] as const).map((type) => {
+              {["Residential", "Commercial"].map((type) => {
                 const isSelected = projectType === type;
                 return (
                   <button
@@ -111,169 +103,137 @@ export function Enquiry() {
                     role="radio"
                     aria-checked={isSelected}
                     onClick={() => setProjectType(type)}
-                    className={`min-h-[76px] sm:min-h-[84px] px-6 py-4 rounded-sm border text-left flex items-center justify-between transition-all duration-500 ease-[cubic-bezier(0.76,0,0.24,1)] focus-visible:ring-2 focus-visible:ring-caramel ${
+                    className={`min-h-[72px] px-6 py-4 rounded-sm border text-left flex items-center justify-between transition-all duration-300 focus-visible:ring-2 focus-visible:ring-copper ${
                       isSelected
-                        ? "border-[#3B2417] bg-[#3B2417] text-[#F6E7D0] shadow-md"
-                        : "border-[#B07A4F]/35 bg-[#F2E8DC]/50 text-[#3B2417] hover:border-[#B07A4F]"
+                        ? "bg-[#3B2417] text-[#F6E7D0] border-[#3B2417] shadow-sm"
+                        : "bg-[#F6E7D0] text-[#3B2417] border-[#B07A4F]/30 hover:border-[#3B2417]"
                     }`}
                   >
                     <div>
-                      <span className="font-serif text-xl sm:text-2xl font-medium block">
-                        {type}
-                      </span>
-                      <span
-                        className={`text-[11px] font-sans uppercase tracking-[0.15em] block mt-0.5 ${
-                          isSelected ? "text-[#E2C196]" : "text-[#B07A4F]"
-                        }`}
-                      >
-                        {type === "Residential"
-                          ? "Private Homes & Estates"
-                          : "Galleries, Boutiques & Sanctuaries"}
+                      <span className="font-serif text-xl block leading-tight">{type}</span>
+                      <span className={`text-xs block mt-0.5 ${isSelected ? "text-[#E2C196]" : "text-[#3B2417]/70"}`}>
+                        {type === "Residential" ? "Homes, apartments, and villas" : "Retail, dining, and offices"}
                       </span>
                     </div>
 
                     <div
-                      className={`w-5 h-5 rounded-full border flex items-center justify-center transition-colors ${
-                        isSelected
-                          ? "border-[#E2C196] bg-[#E2C196]"
-                          : "border-[#B07A4F]/40"
+                      className={`w-4 h-4 rounded-full border flex items-center justify-center ${
+                        isSelected ? "border-[#E2C196] bg-[#E2C196]" : "border-[#B07A4F]/50"
                       }`}
                     >
-                      {isSelected && (
-                        <div className="w-2 h-2 rounded-full bg-[#3B2417]" />
-                      )}
+                      {isSelected && <div className="w-1.5 h-1.5 rounded-full bg-[#3B2417]" />}
                     </div>
                   </button>
                 );
               })}
             </div>
-          </fieldset>
+          </div>
 
-          {/* Step 2: Multi-select chips for Service Scope */}
-          <fieldset className="pt-8 border-t border-[#B07A4F]/25">
-            <legend className="text-xs uppercase tracking-[0.2em] font-sans font-semibold text-[#B07A4F] mb-4 block">
-              Step 02 · Service Scope <span className="text-[#3B2417]/70 font-normal">(Optional multi-select)</span>
-            </legend>
-            <div className="flex flex-wrap gap-3">
-              {SERVICES.map((service) => {
-                const isSelected = selectedServices.includes(service);
+          {/* Step 2: Multi-select service chips */}
+          <div className="space-y-3 pt-6 border-t border-[#B07A4F]/20">
+            <span className="text-sm font-semibold text-[#3B2417] block">
+              2. What services do you need?
+            </span>
+
+            <div className="flex flex-wrap gap-2.5 pt-1">
+              {serviceChips.map((chip) => {
+                const isSelected = services.includes(chip);
                 return (
                   <button
-                    key={service}
+                    key={chip}
                     type="button"
-                    aria-pressed={isSelected}
-                    onClick={() => toggleService(service)}
-                    className={`min-h-[48px] px-5 py-2.5 rounded-full text-xs sm:text-sm font-sans tracking-wide border transition-all duration-300 ease-[cubic-bezier(0.76,0,0.24,1)] focus-visible:ring-2 focus-visible:ring-caramel ${
+                    onClick={() => toggleService(chip)}
+                    className={`btn-caps min-h-[44px] px-5 py-2.5 rounded-full transition-all duration-300 border focus-visible:ring-2 focus-visible:ring-copper ${
                       isSelected
-                        ? "bg-[#B07A4F] text-[#F6E7D0] border-[#B07A4F] shadow-xs"
-                        : "bg-[#F2E8DC]/40 text-[#3B2417] border-[#B07A4F]/35 hover:border-[#B07A4F]"
+                        ? "bg-[#3B2417] text-[#F6E7D0] border-[#3B2417] shadow-sm"
+                        : "bg-[#F6E7D0] text-[#3B2417]/85 border-[#B07A4F]/30 hover:border-[#3B2417]"
                     }`}
                   >
-                    <span className="mr-1.5">{isSelected ? "✓" : "+"}</span>
-                    {service}
+                    {chip}
                   </button>
                 );
               })}
             </div>
-          </fieldset>
+          </div>
 
-          {/* Step 3: Single-select chips for Timeline + Optional Name field */}
-          <fieldset className="pt-8 border-t border-[#B07A4F]/25">
-            <legend className="text-xs uppercase tracking-[0.2em] font-sans font-semibold text-[#B07A4F] mb-4 block">
-              Step 03 · Desired Timeline &amp; Client Details <span className="text-[#3B2417]/70 font-normal">(Optional)</span>
-            </legend>
-            <div className="flex flex-wrap gap-2.5 sm:gap-3 mb-6">
-              {TIMELINES.map((t) => {
-                const isSelected = timeline === t;
+          {/* Step 3: Single-select timeline chips + optional name field */}
+          <div className="space-y-4 pt-6 border-t border-[#B07A4F]/20">
+            <span className="text-sm font-semibold text-[#3B2417] block">
+              3. When are you looking to start?
+            </span>
+
+            <div className="flex flex-wrap gap-2.5 pt-1">
+              {timelineChips.map((chip) => {
+                const isSelected = timeline === chip;
                 return (
                   <button
-                    key={t}
+                    key={chip}
                     type="button"
-                    aria-pressed={isSelected}
-                    onClick={() => setTimeline(isSelected ? "" : t)}
-                    className={`min-h-[48px] px-5 py-2.5 rounded-full text-xs font-sans tracking-wide border transition-all duration-300 ease-[cubic-bezier(0.76,0,0.24,1)] focus-visible:ring-2 focus-visible:ring-caramel ${
+                    onClick={() => setTimeline(chip)}
+                    className={`btn-caps min-h-[44px] px-5 py-2.5 rounded-full transition-all duration-300 border focus-visible:ring-2 focus-visible:ring-copper ${
                       isSelected
-                        ? "bg-[#3B2417] text-[#F6E7D0] border-[#3B2417]"
-                        : "bg-[#F2E8DC]/40 text-[#3B2417] border-[#B07A4F]/35 hover:border-[#B07A4F]"
+                        ? "bg-[#3B2417] text-[#F6E7D0] border-[#3B2417] shadow-sm"
+                        : "bg-[#F6E7D0] text-[#3B2417]/85 border-[#B07A4F]/30 hover:border-[#3B2417]"
                     }`}
                   >
-                    {t}
+                    {chip}
                   </button>
                 );
               })}
             </div>
 
-            {/* Optional Name Input Field (No Default Name) */}
-            <div className="mt-4 max-w-md">
-              <label
-                htmlFor="client-name"
-                className="block text-xs uppercase tracking-[0.15em] font-sans text-[#3B2417]/80 mb-2"
-              >
-                Your Name / Family Office (Optional)
+            <div className="pt-4 max-w-md">
+              <label htmlFor="name-input" className="block text-xs text-[#3B2417]/80 font-medium mb-1.5">
+                Your name (optional)
               </label>
               <input
-                id="client-name"
+                id="name-input"
                 type="text"
-                value={clientName}
-                onChange={(e) => setClientName(e.target.value)}
-                placeholder="Leave blank for confidential enquiry"
-                className="w-full px-4 py-3 rounded-sm bg-white/70 border border-[#B07A4F]/40 text-[#3B2417] placeholder-[#3B2417]/40 text-sm font-sans focus:bg-white focus:border-[#3B2417] focus-visible:ring-2 focus-visible:ring-caramel transition-colors"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                placeholder="Maya Senanayake"
+                className="w-full min-h-[46px] px-4 rounded-sm bg-[#F6E7D0] border border-[#B07A4F]/30 text-[#3B2417] placeholder:text-[#3B2417]/40 text-sm focus-visible:ring-2 focus-visible:ring-copper outline-none"
               />
             </div>
-          </fieldset>
-
-          {/* Live Message Preview Box */}
-          <div className="p-4 sm:p-5 rounded-sm bg-[#F2E8DC] border border-[#B07A4F]/30 text-xs text-[#3B2417]/90 font-mono leading-relaxed">
-            <span className="block text-[10px] uppercase tracking-[0.2em] text-[#B07A4F] font-sans font-semibold mb-1">
-              Generated WhatsApp Message:
-            </span>
-            {projectType ? (
-              <>&ldquo;{messageText}&rdquo;</>
-            ) : (
-              <span className="italic text-[#3B2417]/60">
-                Please select a project classification (Step 01) to formulate your message.
-              </span>
-            )}
           </div>
 
-          {/* Final Action Button: Disabled until Step 1 is chosen */}
-          <div className="pt-4 flex flex-col sm:flex-row items-center justify-between gap-4">
-            {projectType ? (
-              <a
-                href={whatsappUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="w-full sm:w-auto min-h-[48px] inline-flex items-center justify-center px-10 py-3.5 rounded-full bg-[#3B2417] hover:bg-[#5A3A2A] text-[#F6E7D0] uppercase text-xs tracking-[0.25em] font-medium shadow-md transition-all duration-500 ease-[cubic-bezier(0.76,0,0.24,1)] active:scale-[0.98] focus-visible:ring-2 focus-visible:ring-caramel"
-              >
-                <span>Send on WhatsApp</span>
-                <svg
-                  className="ml-3 w-4 h-4 text-[#E2C196]"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                >
-                  <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z" />
-                </svg>
-              </a>
-            ) : (
-              <button
-                type="button"
-                disabled
-                aria-disabled="true"
-                className="w-full sm:w-auto min-h-[48px] inline-flex items-center justify-center px-10 py-3.5 rounded-full bg-[#3B2417]/40 text-[#F6E7D0]/60 uppercase text-xs tracking-[0.25em] font-medium cursor-not-allowed"
-              >
-                <span>Select Project Type to Continue</span>
-              </button>
-            )}
+          {/* Submit Button */}
+          <div className="pt-6 border-t border-[#B07A4F]/20">
+            <a
+              href={isSubmitDisabled ? "#" : whatsappUrl}
+              target={isSubmitDisabled ? undefined : "_blank"}
+              rel={isSubmitDisabled ? undefined : "noopener noreferrer"}
+              aria-disabled={isSubmitDisabled}
+              onClick={(e) => {
+                if (isSubmitDisabled) {
+                  e.preventDefault();
+                }
+              }}
+              className={`btn-caps w-full min-h-[50px] py-4 rounded-full flex items-center justify-center transition-all duration-300 shadow-sm ${
+                isSubmitDisabled
+                  ? "bg-[#B07A4F]/30 text-[#3B2417]/40 cursor-not-allowed"
+                  : "bg-[#3B2417] text-[#F6E7D0] hover:bg-[#5A3A2A] cursor-pointer"
+              }`}
+            >
+              Send on WhatsApp
+            </a>
 
-            <span className="text-xs text-[#3B2417]/60 font-sans tracking-wide">
-              Replies typically within 24 hours · Confidential consultation
-            </span>
+            {isSubmitDisabled && (
+              <p className="text-xs text-[#3B2417]/60 text-center mt-2.5 font-normal">
+                Please select Residential or Commercial to continue.
+              </p>
+            )}
           </div>
         </div>
+
+        {/* Contact details rendered only if non-empty in config */}
+        {hasContactDetails && (
+          <div className="pt-4 text-center text-xs text-[#3B2417]/75 space-y-1">
+            {siteConfig.contact.address && <p>{siteConfig.contact.address}</p>}
+            {siteConfig.contact.email && <p>Email: {siteConfig.contact.email}</p>}
+            {siteConfig.contact.hours && <p>{siteConfig.contact.hours}</p>}
+          </div>
+        )}
       </div>
     </section>
   );

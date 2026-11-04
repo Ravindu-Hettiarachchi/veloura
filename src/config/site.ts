@@ -40,12 +40,12 @@ if (typeof window !== "undefined" && process.env.NODE_ENV === "development" && i
 export const siteConfig: SiteConfig = {
   name: "VELOURA Interior Design Studio",
   shortName: "VELOURA",
-  tagline: "Atelier of Architectural Interiors",
+  tagline: "Interior Design Studio, Colombo",
   description:
-    "An editorial interior design atelier crafting bespoke residential and commercial sanctuaries through timeless materiality, architectural restraint, and warm minimalism.",
+    "A warm, tactile interior design studio in Sri Lanka crafting calm, enduring homes and commercial spaces using natural materials, local craft, and balanced light.",
   url: "https://veloura.pixbeelabs.com",
   ogImage: "/images/og-image.jpg",
-  themeColor: "#24160F",
+  themeColor: "#F2E8DC",
   whatsappNumber: ACTUAL_WHATSAPP_NUMBER,
   isPlaceholderWhatsApp: isPlaceholder,
   contact: {
@@ -54,9 +54,10 @@ export const siteConfig: SiteConfig = {
     hours: "", // Empty by default
   },
   navigation: [
-    { label: "Studio", href: "/studio" },
-    { label: "Portfolio", href: "/portfolio" },
-    { label: "Process", href: "/process" },
-    { label: "Enquiry", href: "/enquiry" },
+    { label: "Studio", href: "#studio" },
+    { label: "Materials", href: "#materials" },
+    { label: "Portfolio", href: "#portfolio" },
+    { label: "Process", href: "#process" },
+    { label: "Enquiry", href: "#enquiry" },
   ],
 };
