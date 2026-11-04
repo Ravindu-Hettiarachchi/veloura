@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { Cormorant_Garamond, Jost } from "next/font/google";
+import { Bodoni_Moda, Instrument_Serif, Tenor_Sans } from "next/font/google";
 import "./globals.css";
 import { siteConfig } from "@/config/site";
 import { MotionProvider } from "@/components/motion/MotionProvider";
@@ -7,23 +7,31 @@ import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { FloatingWhatsApp } from "@/components/ui/FloatingWhatsApp";
 
-const cormorant = Cormorant_Garamond({
+const bodoni = Bodoni_Moda({
   subsets: ["latin"],
-  weight: ["400", "500", "600"],
+  weight: ["400", "500", "600", "700"],
   style: ["normal", "italic"],
-  variable: "--font-cormorant",
+  variable: "--font-bodoni",
   display: "swap",
 });
 
-const jost = Jost({
+const instrument = Instrument_Serif({
   subsets: ["latin"],
-  weight: ["300", "400", "500", "600"],
-  variable: "--font-jost",
+  weight: ["400"],
+  style: ["normal", "italic"],
+  variable: "--font-instrument",
+  display: "swap",
+});
+
+const tenor = Tenor_Sans({
+  subsets: ["latin"],
+  weight: ["400"],
+  variable: "--font-tenor",
   display: "swap",
 });
 
 export const viewport: Viewport = {
-  themeColor: "#1A100B",
+  themeColor: "#140D08",
   width: "device-width",
   initialScale: 1,
 };
@@ -31,7 +39,7 @@ export const viewport: Viewport = {
 export const metadata: Metadata = {
   metadataBase: new URL(siteConfig.url),
   title: {
-    default: `${siteConfig.shortName} — ${siteConfig.tagline}`,
+    default: `${siteConfig.shortName} — Architectural Interior Atelier`,
     template: `%s | ${siteConfig.shortName}`,
   },
   description: siteConfig.description,
@@ -49,7 +57,7 @@ export const metadata: Metadata = {
   authors: [{ name: "VELOURA Atelier" }],
   creator: "VELOURA",
   openGraph: {
-    title: `${siteConfig.shortName} — ${siteConfig.tagline}`,
+    title: `${siteConfig.shortName} — Architectural Interior Atelier`,
     description: siteConfig.description,
     url: siteConfig.url,
     siteName: siteConfig.name,
@@ -66,7 +74,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: `${siteConfig.shortName} — ${siteConfig.tagline}`,
+    title: `${siteConfig.shortName} — Architectural Interior Atelier`,
     description: siteConfig.description,
     images: ["/images/og-image.jpg"],
   },
@@ -82,16 +90,19 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${cormorant.variable} ${jost.variable} scroll-smooth`}>
+    <html
+      lang="en"
+      className={`${bodoni.variable} ${instrument.variable} ${tenor.variable} scroll-smooth`}
+    >
       <head>
         <link rel="icon" href="/icon.png" type="image/png" sizes="512x512" />
         <link rel="apple-touch-icon" href="/apple-icon.png" sizes="180x180" />
       </head>
-      <body className="bg-[#1A100B] text-[#F6E7D0] selection:bg-[#E2C196] selection:text-[#1A100B] antialiased min-h-screen flex flex-col">
+      <body className="bg-[#140D08] text-[#F6E7D0] selection:bg-[#E2C196] selection:text-[#140D08] antialiased min-h-screen flex flex-col font-sans">
         {/* Semantic Accessible Skip Link */}
         <a
           href="#main-content"
-          className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[100] focus:px-5 focus:py-2.5 focus:bg-[#E2C196] focus:text-[#1A100B] focus:font-medium focus:text-xs focus:uppercase focus:tracking-[0.2em] focus:rounded-sm focus:shadow-xl focus:outline-none focus:ring-2 focus:ring-[#F6E7D0]"
+          className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[100] focus:px-5 focus:py-2.5 focus:bg-[#E2C196] focus:text-[#140D08] focus:font-medium focus:text-xs focus:uppercase focus:tracking-[0.2em] focus:rounded-sm focus:shadow-xl focus:outline-none focus:ring-2 focus:ring-[#F6E7D0]"
         >
           Skip to main content
         </a>
