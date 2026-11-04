@@ -1,267 +1,391 @@
 "use client";
 
-import React, { useState, useRef } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import Image from "next/image";
-import { m, useScroll, useTransform, AnimatePresence } from "framer-motion";
+import { m, useReducedMotion } from "framer-motion";
 import { EASE } from "@/lib/constants";
+import { heroAnnotations } from "@/data/hero";
 
-const folioRooms = [
-  {
-    id: "living",
-    title: "Living & Light",
-    subtitle: "The Monolith Residence",
-    location: "Colombo 07",
-    materials: "Honed limestone & linen",
-    image: "/images/hero.webp",
-    aspect: "col-span-12 lg:col-span-6",
-    isCenter: true,
-  },
-  {
-    id: "joinery",
-    title: "Craft & Detail",
-    subtitle: "Smoked Teak & Bronze",
-    location: "Studio joinery",
-    materials: "Hand-finished local timber",
-    image: "/images/studio-detail.webp",
-    aspect: "col-span-6 lg:col-span-3",
-    isCenter: false,
-  },
-  {
-    id: "veranda",
-    title: "Air & Veranda",
-    subtitle: "Solarium Villa",
-    location: "Bentota",
-    materials: "Lime plaster & open cane",
-    image: "/images/portfolio-3.webp",
-    aspect: "col-span-6 lg:col-span-3",
-    isCenter: false,
-  },
-];
+type LightState = "off" | "day" | "evening";
 
 export function Hero() {
-  const [activeRoom, setActiveRoom] = useState(0);
-  const heroRef = useRef<HTMLElement>(null);
+  const prefersReduced = useReducedMotion();
+  const [lightState, setLightState] = useState<LightState>(
+    prefersReduced ? "day" : "off"
+  );
+  const [isPulling, setIsPulling] = useState(false);
+  const [showHint, setShowHint] = useState(false);
+  const [hasInteracted, setHasInteracted] = useState(false);
+  const [showAnnotations, setShowAnnotations] = useState(Boolean(prefersReduced));
+  const [eveningLoaded, setEveningLoaded] = useState(false);
 
-  // Cord lengthens naturally as user scrolls through the hero
-  const { scrollYProgress } = useScroll({
-    target: heroRef,
-    offset: ["start start", "end start"],
-  });
+  // Automatic "lights on" sequence runs ONCE on mount:
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const params = new URLSearchParams(window.location.search);
+      const forcedState = params.get("state") as LightState | null;
+      if (forcedState === "off" || forcedState === "day" || forcedState === "evening") {
+        setLightState(forcedState);
+        if (forcedState !== "off") {
+          setShowAnnotations(true);
+          setEveningLoaded(true);
+        }
+        return;
+      }
+    }
 
-  const cordScaleY = useTransform(scrollYProgress, [0, 1], [1, 1.6]);
+    if (prefersReduced) {
+      setLightState("day");
+      setShowAnnotations(true);
+      return;
+    }
+
+    const lightTimer = setTimeout(() => {
+      setLightState("day");
+      // Annotations fade in after the lights come on
+      setTimeout(() => {
+        setShowAnnotations(true);
+      }, 900);
+    }, 900);
+
+    // "Pull to change the light" hint appears after 3 seconds
+    const hintTimer = setTimeout(() => {
+      setShowHint(true);
+    }, 3000);
+
+    return () => {
+      clearTimeout(lightTimer);
+      clearTimeout(hintTimer);
+    };
+  }, [prefersReduced]);
+
+  // Handle cord/lamp pull interaction
+  const handleToggleLight = () => {
+    setHasInteracted(true);
+    setShowHint(false);
+
+    if (prefersReduced) {
+      setLightState((prev) => (prev === "evening" ? "day" : "evening"));
+      return;
+    }
+
+    setIsPulling(true);
+    // Toggle state immediately on cord pull
+    setLightState((prev) => (prev === "evening" ? "day" : "evening"));
+
+    // Cord pull animation: moves down 10px in 0.25s then returns in 0.4s (total 0.65s)
+    setTimeout(() => {
+      setIsPulling(false);
+    }, 650);
+  };
+
+  const isEvening = lightState === "evening";
+  const isOff = lightState === "off";
 
   return (
     <section
-      ref={heroRef}
-      className="relative w-full min-h-[100svh] bg-[#F2E8DC] text-[#3B2417] flex flex-col justify-between pt-28 sm:pt-32 pb-10 sm:pb-14 px-6 sm:px-10 lg:px-14 overflow-hidden border-b border-[#B07A4F]/20"
+      id="top"
+      className="relative w-full min-h-[100svh] bg-[#F2E8DC] text-[#3B2417] flex items-center overflow-hidden border-b border-[#B07A4F]/20 pt-24 sm:pt-28 pb-12 sm:pb-16"
     >
       {/* 
-        -----------------------------------------------------------------
-        Pendant Cord & Glowing Brass Lamp (Brand Signature)
-        Suspended directly from the top, aligned with the central portal
-        -----------------------------------------------------------------
+        -------------------------------------------------------------
+        Static Paper Grain Overlay:
+        SVG feTurbulence noise at ~4% opacity with pointer-events: none
+        -------------------------------------------------------------
       */}
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 z-30 pointer-events-none flex flex-col items-center">
-        {/* 1px cord that lengthens on scroll */}
-        <m.div
-          style={{
-            scaleY: cordScaleY,
-            transformOrigin: "top",
-          }}
-          className="w-[1px] h-24 sm:h-32 bg-[#B07A4F]"
-        />
-
-        {/* Lamp Circle & Soft Caramel Glow */}
-        <div className="relative -mt-1 flex items-center justify-center">
-          {/* Caramel glow fading in on load */}
-          <m.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.5, duration: 2.2, ease: EASE }}
-            className="absolute w-16 h-16 rounded-full bg-[#E2C196]/60 blur-md pointer-events-none"
+      <svg
+        className="absolute inset-0 w-full h-full opacity-[0.04] pointer-events-none mix-blend-multiply z-0"
+        aria-hidden="true"
+      >
+        <filter id="hero-paper-grain">
+          <feTurbulence
+            type="fractalNoise"
+            baseFrequency="0.75"
+            numOctaves="3"
+            stitchTiles="stitch"
           />
+          <feColorMatrix type="saturate" values="0" />
+        </filter>
+        <rect width="100%" height="100%" filter="url(#hero-paper-grain)" />
+      </svg>
 
-          {/* Delicate outer brass ring */}
-          <div className="w-6 h-6 rounded-full border border-[#B07A4F] flex items-center justify-center bg-[#F2E8DC] shadow-sm">
-            {/* Solid lamp bead */}
-            <div className="w-2.5 h-2.5 rounded-full bg-[#B07A4F]" />
+      <div className="relative max-w-7xl mx-auto px-4 sm:px-8 lg:px-12 w-full z-10">
+        {/* 12-Column Grid Layout (Asymmetric, Left-Aligned) */}
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-8 lg:gap-12 items-center">
+          {/* 
+            ---------------------------------------------------------
+            Left Column (5 columns on desktop):
+            Headline, one line of text, two buttons
+            ---------------------------------------------------------
+          */}
+          <div className="md:col-span-6 lg:col-span-5 flex flex-col justify-center space-y-6 sm:space-y-8 z-10">
+            {/* Headline: Cormorant Garamond 500, clamp(48px, 7vw, 112px), left aligned, dark-roast, no italics */}
+            <h1 className="font-serif font-medium text-[#3B2417] text-[clamp(44px,6.2vw,104px)] leading-[0.98] tracking-tight">
+              Rooms that feel calm
+              <br />
+              the moment you
+              <br />
+              walk in.
+            </h1>
+
+            {/* Text line: exactly 16 words (max 18 words) */}
+            <p className="font-sans text-base sm:text-lg text-[#3B2417]/85 max-w-lg leading-relaxed font-normal">
+              We design homes and small commercial spaces across Sri Lanka, using teak, limestone, brass and linen.
+            </p>
+
+            {/* Buttons: min tap height 48px */}
+            <div className="flex flex-wrap items-center gap-5 sm:gap-6 pt-2">
+              {/* Solid dark-roast button with cream text */}
+              <a
+                href="#portfolio"
+                className="min-h-[48px] px-8 py-3 rounded-full bg-[#3B2417] text-[#F6E7D0] hover:bg-[#5A3A2A] transition-all duration-300 font-sans text-sm tracking-wide inline-flex items-center justify-center focus-visible:ring-2 focus-visible:ring-[#B07A4F] shadow-xs active:scale-[0.98]"
+              >
+                See our work
+              </a>
+
+              {/* Plain text link with a copper underline */}
+              <a
+                href="#enquiry"
+                className="min-h-[48px] inline-flex items-center font-sans text-sm text-[#3B2417] hover:text-[#B07A4F] underline underline-offset-8 decoration-[#B07A4F] decoration-1 transition-colors focus-visible:ring-2 focus-visible:ring-[#B07A4F]"
+              >
+                Start a conversation
+              </a>
+            </div>
           </div>
-        </div>
-      </div>
 
-      {/* 
-        -----------------------------------------------------------------
-        1. Top Editorial Masthead (Airy, Generous, Monograph Style)
-        -----------------------------------------------------------------
-      */}
-      <div className="max-w-7xl mx-auto w-full flex flex-col sm:flex-row sm:items-center justify-between text-xs text-[#3B2417]/80 pb-6 border-b border-[#B07A4F]/20 gap-3">
-        <div className="flex items-center space-x-3">
-          <span className="w-2 h-2 rounded-full bg-[#B07A4F]" />
-          <span className="nav-caps text-[#B07A4F]">VELOURA</span>
-          <span className="text-[#B07A4F]/40">·</span>
-          <span>Interior Design &amp; Architecture</span>
-        </div>
+          {/* 
+            ---------------------------------------------------------
+            Right Column (6 columns on desktop, slightly lower than text):
+            One tall arch-shaped window (aspect ratio 4:5, 1px copper outline)
+            With the signature "Pull the cord" pendant lamp interaction
+            ---------------------------------------------------------
+          */}
+          <div className="md:col-span-6 lg:col-span-6 lg:col-start-7 w-full flex flex-col items-center mt-2 sm:mt-4 lg:mt-10 relative">
+            {/* Arch-shaped window container (aspect ratio 4:5, 1px copper outline) */}
+            <div className="relative w-full max-w-[480px] lg:max-w-[520px] aspect-[4/5] max-h-[70svh] md:max-h-none rounded-t-[200px] sm:rounded-t-[240px] lg:rounded-t-[280px] overflow-hidden border border-[#B07A4F] shadow-xl bg-[#F6E7D0]">
+              {/* Day Image (Priority LCP image) */}
+              <div
+                className="absolute inset-0 transition-opacity ease-[cubic-bezier(0.76,0,0.24,1)]"
+                style={{
+                  opacity: isEvening ? 0 : 1,
+                  transitionDuration: prefersReduced ? "0s" : "1.4s",
+                }}
+              >
+                <Image
+                  src="/images/hero-day.webp"
+                  alt="Bright morning interior designed by VELOURA with lime plaster wall, washed linen sofa, teak coffee table and tropical plants"
+                  fill
+                  priority
+                  sizes="(max-width: 768px) 100vw, 50vw"
+                  className="object-cover object-center"
+                />
+              </div>
 
-        <div className="flex items-center space-x-6 text-xs text-[#3B2417]/70">
-          <span>Colombo 07, Sri Lanka</span>
-          <span className="hidden sm:inline text-[#B07A4F]/40">·</span>
-          <span className="hidden sm:inline">Homes &amp; Commercial Spaces</span>
-        </div>
-      </div>
+              {/* Evening Image (Dusk crossfade, same framing, warm lamps on) */}
+              <div
+                className="absolute inset-0 transition-opacity ease-[cubic-bezier(0.76,0,0.24,1)]"
+                style={{
+                  opacity: isEvening ? 1 : 0,
+                  transitionDuration: prefersReduced ? "0s" : "1.4s",
+                }}
+                aria-hidden={!isEvening}
+              >
+                <Image
+                  src="/images/hero-evening.webp"
+                  alt="Evening dusk view of the living room designed by VELOURA with warm lamps on"
+                  fill
+                  loading="lazy"
+                  sizes="(max-width: 768px) 100vw, 50vw"
+                  className="object-cover object-center"
+                />
+              </div>
 
-      {/* 
-        -----------------------------------------------------------------
-        2. Editorial Headline Spread (Artistic & Spacious)
-        -----------------------------------------------------------------
-      */}
-      <div className="max-w-7xl mx-auto w-full pt-8 pb-6 sm:py-8 text-center">
-        <m.div
-          initial={{ opacity: 0, y: 24 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1.2, ease: EASE }}
-          className="max-w-4xl mx-auto space-y-4"
-        >
-          <h1 className="heading-hero text-[#3B2417] text-balance">
-            Rooms that feel calm the moment you walk in.
-          </h1>
+              {/* No-JavaScript fallback */}
+              <noscript>
+                <Image
+                  src="/images/hero-day.webp"
+                  alt="Bright morning interior by VELOURA"
+                  fill
+                  className="object-cover object-center"
+                />
+              </noscript>
 
-          <p className="text-base sm:text-lg text-[#3B2417]/80 font-normal max-w-2xl mx-auto leading-relaxed">
-            VELOURA designs homes and small commercial spaces across Sri Lanka. We build with teak,
-            limestone, brass, and linen—materials that feel good to live with and grow better with time.
-          </p>
-        </m.div>
-      </div>
-
-      {/* 
-        -----------------------------------------------------------------
-        3. Modern Architectural Spatial Folio (The Centerpiece)
-        An interactive, asymmetrical 3-panel exhibition spread
-        -----------------------------------------------------------------
-      */}
-      <div className="max-w-7xl mx-auto w-full my-auto py-4 sm:py-6">
-        <div className="grid grid-cols-12 gap-4 sm:gap-6 lg:gap-8 items-end">
-          {/* Left Wing: Joinery & Tactile Craft Detail */}
-          <m.div
-            initial={{ opacity: 0, y: 32 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.3, duration: 1.2, ease: EASE }}
-            className="hidden lg:block lg:col-span-3 space-y-3 group cursor-pointer"
-            onClick={() => setActiveRoom(1)}
-          >
-            <div className="relative w-full h-[380px] rounded-t-[140px] overflow-hidden border border-[#B07A4F]/35 shadow-md bg-[#F6E7D0] transition-all duration-700 group-hover:border-[#3B2417]">
-              <Image
-                src="/images/studio-detail.webp"
-                alt="Smoked teak cabinetry and bronze joinery detail by VELOURA"
-                fill
-                sizes="(max-width: 1200px) 25vw, 300px"
-                className="object-cover transition-transform duration-1000 ease-[cubic-bezier(0.76,0,0.24,1)] group-hover:scale-105"
-              />
-              <div className="absolute inset-0 bg-[#F2E8DC]/10 group-hover:bg-transparent transition-colors duration-500" />
-            </div>
-
-            <div className="pt-1 flex items-baseline justify-between text-xs">
-              <span className="font-serif text-base text-[#3B2417]">Smoked Teak &amp; Bronze</span>
-              <span className="text-[11px] text-[#B07A4F]">Craft detail</span>
-            </div>
-          </m.div>
-
-          {/* Center Main Arch Portal (The Grand Architectural Viewport) */}
-          <m.div
-            initial={{ opacity: 0, y: 36 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.1, duration: 1.2, ease: EASE }}
-            className="col-span-12 lg:col-span-6 space-y-4"
-          >
-            {/* The Tall Arch Window */}
-            <div className="relative w-full h-[440px] sm:h-[520px] lg:h-[560px] rounded-t-[240px] overflow-hidden border border-[#B07A4F]/40 shadow-2xl bg-[#F6E7D0]">
-              <Image
-                src="/images/hero.webp"
-                alt="Bright, warm living room with arched doorway, linen sofa, and limestone in Colombo"
-                fill
-                priority
-                sizes="(max-width: 1024px) 100vw, 50vw"
-                className="object-cover object-center"
-              />
-
-              {/* "Lights on" moment on load: espresso overlay starts at 65% opacity and fades to 0 over 2.2s */}
+              {/* 
+                "Lights on" espresso overlay:
+                Starts at 70% opacity in 'off' state, fades to 0 over 2.2s with EASE
+              */}
               <m.div
-                initial={{ opacity: 0.65 }}
-                animate={{ opacity: 0 }}
-                transition={{ duration: 2.2, ease: EASE }}
-                className="absolute inset-0 bg-[#24160F] pointer-events-none"
+                initial={false}
+                animate={{
+                  opacity: isOff ? 0.7 : 0,
+                }}
+                transition={{
+                  duration: prefersReduced ? 0 : 2.2,
+                  ease: EASE,
+                }}
+                className="absolute inset-0 bg-[#24160F] pointer-events-none z-10"
                 aria-hidden="true"
               />
 
-              {/* Floating Architectural Location Pill */}
-              <div className="absolute bottom-6 left-6 right-6 flex items-center justify-between pointer-events-none z-10">
-                <span className="px-3.5 py-1.5 rounded-full bg-[#F2E8DC]/95 backdrop-blur-sm border border-[#B07A4F]/40 text-xs text-[#3B2417] font-medium shadow-sm">
-                  The Monolith Residence · Colombo 07
-                </span>
+              {/* 
+                -----------------------------------------------------
+                Three Material Annotations:
+                "Teak, oiled", "Lime plaster wall", "Linen, washed"
+                Each is a thin 1px copper line ending in a 6px dot,
+                with a small cream pill (Jost 13px, dark-roast text).
+                On screens under 640px (< sm), only the first is shown.
+                -----------------------------------------------------
+              */}
+              {heroAnnotations.map((anno, index) => {
+                const isFirst = index === 0;
+                return (
+                  <m.div
+                    key={anno.id}
+                    initial={{ opacity: 0 }}
+                    animate={{
+                      opacity: showAnnotations && !isOff ? 1 : 0,
+                    }}
+                    transition={{
+                      duration: prefersReduced ? 0 : 0.8,
+                      delay: prefersReduced ? 0 : index * 0.15,
+                      ease: EASE,
+                    }}
+                    className={`absolute z-20 pointer-events-none items-center ${
+                      isFirst ? "flex" : "hidden sm:flex"
+                    }`}
+                    style={{
+                      left: `${anno.xPercent}%`,
+                      top: `${anno.yPercent}%`,
+                      transform: "translate(-50%, -50%)",
+                    }}
+                  >
+                    {anno.lineDirection === "left" ? (
+                      <div className="flex items-center">
+                        <span className="px-2.5 py-0.5 rounded-full bg-[#F6E7D0]/95 backdrop-blur-xs border border-[#B07A4F]/40 font-sans text-[13px] text-[#3B2417] shadow-xs whitespace-nowrap">
+                          {anno.label}
+                        </span>
+                        <div
+                          className="h-[1px] bg-[#B07A4F]"
+                          style={{ width: `${anno.lineLength}px` }}
+                        />
+                        <div className="w-1.5 h-1.5 rounded-full bg-[#B07A4F]" />
+                      </div>
+                    ) : (
+                      <div className="flex items-center">
+                        <div className="w-1.5 h-1.5 rounded-full bg-[#B07A4F]" />
+                        <div
+                          className="h-[1px] bg-[#B07A4F]"
+                          style={{ width: `${anno.lineLength}px` }}
+                        />
+                        <span className="px-2.5 py-0.5 rounded-full bg-[#F6E7D0]/95 backdrop-blur-xs border border-[#B07A4F]/40 font-sans text-[13px] text-[#3B2417] shadow-xs whitespace-nowrap">
+                          {anno.label}
+                        </span>
+                      </div>
+                    )}
+                  </m.div>
+                );
+              })}
 
-                <span className="hidden sm:inline-block px-3 py-1.5 rounded-full bg-[#F6E7D0]/90 backdrop-blur-sm border border-[#B07A4F]/30 text-[11px] text-[#3B2417]/80">
-                  Honed limestone &amp; linen
-                </span>
+              {/* 
+                -----------------------------------------------------
+                Signature Interaction: "Pull the cord" Pendant Lamp
+                Hangs inside the top of the arch at its horizontal centre.
+                Cord runs from the ceiling canopy down to the lamp.
+                -----------------------------------------------------
+              */}
+              <div className="absolute top-0 left-1/2 -translate-x-1/2 z-30 flex flex-col items-center">
+                {/* 
+                  1px copper cord hanging down into the arch.
+                  Cord moves down 10px in 0.25s then returns in 0.4s on pull.
+                */}
+                <m.div
+                  animate={{
+                    y: isPulling ? 10 : 0,
+                  }}
+                  transition={{
+                    duration: isPulling ? 0.25 : 0.4,
+                    ease: EASE,
+                  }}
+                  className="w-[1px] h-20 sm:h-24 bg-[#B07A4F] origin-top"
+                />
+
+                {/* Lamp fixture container with pull motion */}
+                <m.div
+                  animate={{
+                    y: isPulling ? 10 : 0,
+                  }}
+                  transition={{
+                    duration: isPulling ? 0.25 : 0.4,
+                    ease: EASE,
+                  }}
+                  className="relative -mt-1 flex items-center justify-center"
+                >
+                  {/* Soft caramel glow behind the lamp */}
+                  <m.div
+                    initial={{ opacity: 0 }}
+                    animate={{
+                      opacity: isOff ? 0 : isEvening ? 0.9 : 0.65,
+                      scale: isEvening ? 1.15 : 1,
+                    }}
+                    transition={{
+                      duration: prefersReduced ? 0 : 2.2,
+                      ease: EASE,
+                    }}
+                    className="absolute w-20 h-20 rounded-full bg-[#E2C196] blur-md pointer-events-none"
+                    aria-hidden="true"
+                  />
+
+                  {/* 
+                    Interactive Lamp Button:
+                    Real <button> with aria-pressed, aria-label, visible copper focus ring.
+                    Hit area: min 48x48px.
+                  */}
+                  <button
+                    type="button"
+                    onClick={handleToggleLight}
+                    aria-pressed={isEvening}
+                    aria-label="Switch between day and evening light"
+                    className="group relative min-w-[48px] min-h-[48px] flex items-center justify-center rounded-full cursor-pointer focus-visible:ring-2 focus-visible:ring-[#B07A4F] focus-visible:outline-none transition-transform active:scale-95"
+                  >
+                    {/* 28px circle with a thin 1px ring */}
+                    <div className="w-7 h-7 rounded-full border border-[#B07A4F] flex items-center justify-center bg-[#F2E8DC] shadow-sm transition-colors duration-500 group-hover:border-[#3B2417]">
+                      {/* Solid lamp bead / filament */}
+                      <div
+                        className={`w-2.5 h-2.5 rounded-full transition-colors duration-500 ${
+                          isOff
+                            ? "bg-[#3B2417]/50"
+                            : isEvening
+                            ? "bg-[#B07A4F] ring-2 ring-[#E2C196]"
+                            : "bg-[#B07A4F]"
+                        }`}
+                      />
+                    </div>
+                  </button>
+
+                  {/* Hint: "Pull to change the light" in Jost 13px, fades out on first interaction */}
+                  <m.div
+                    initial={{ opacity: 0, x: 12 }}
+                    animate={{
+                      opacity: showHint && !hasInteracted && !isOff ? 1 : 0,
+                      x: showHint && !hasInteracted && !isOff ? 0 : 12,
+                    }}
+                    transition={{
+                      duration: 0.6,
+                      ease: EASE,
+                    }}
+                    className={`absolute left-full ml-2 sm:ml-3 top-1/2 -translate-y-1/2 pointer-events-none whitespace-nowrap z-30 ${
+                      hasInteracted ? "hidden" : "block"
+                    }`}
+                  >
+                    <span className="px-2.5 sm:px-3 py-0.5 sm:py-1 rounded-full bg-[#F6E7D0]/95 backdrop-blur-xs border border-[#B07A4F]/40 font-sans text-[12px] sm:text-[13px] text-[#3B2417] shadow-sm flex items-center gap-1.5">
+                      <span className="w-1.5 h-1.5 rounded-full bg-[#B07A4F]" />
+                      Pull to change the light
+                    </span>
+                  </m.div>
+                </m.div>
               </div>
             </div>
-          </m.div>
-
-          {/* Right Wing: Veranda & Natural Air Flow */}
-          <m.div
-            initial={{ opacity: 0, y: 32 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.4, duration: 1.2, ease: EASE }}
-            className="hidden lg:block lg:col-span-3 space-y-3 group cursor-pointer"
-            onClick={() => setActiveRoom(2)}
-          >
-            <div className="relative w-full h-[380px] rounded-t-[140px] overflow-hidden border border-[#B07A4F]/35 shadow-md bg-[#F6E7D0] transition-all duration-700 group-hover:border-[#3B2417]">
-              <Image
-                src="/images/portfolio-3.webp"
-                alt="Coastal veranda with lime plaster and pivoting teak portals in Bentota"
-                fill
-                sizes="(max-width: 1200px) 25vw, 300px"
-                className="object-cover transition-transform duration-1000 ease-[cubic-bezier(0.76,0,0.24,1)] group-hover:scale-105"
-              />
-              <div className="absolute inset-0 bg-[#F2E8DC]/10 group-hover:bg-transparent transition-colors duration-500" />
-            </div>
-
-            <div className="pt-1 flex items-baseline justify-between text-xs">
-              <span className="font-serif text-base text-[#3B2417]">Solarium Villa</span>
-              <span className="text-[11px] text-[#B07A4F]">Bentota</span>
-            </div>
-          </m.div>
-        </div>
-      </div>
-
-      {/* 
-        -----------------------------------------------------------------
-        4. Bottom Architectural Colophon & Seamless Discovery Links
-        (Replaces typical CTA pill buttons with editorial prompts)
-        -----------------------------------------------------------------
-      */}
-      <div className="max-w-7xl mx-auto w-full pt-6 border-t border-[#B07A4F]/20 flex flex-col sm:flex-row items-center justify-between gap-6 text-xs text-[#3B2417]">
-        {/* Quick Discovery Navigation */}
-        <div className="flex items-center space-x-6">
-          <a
-            href="#portfolio"
-            className="btn-caps inline-flex items-center px-6 py-2.5 rounded-full bg-[#3B2417] text-[#F6E7D0] hover:bg-[#5A3A2A] transition-all duration-300 shadow-sm focus-visible:ring-2 focus-visible:ring-copper"
-          >
-            <span>View selected projects</span>
-            <span className="ml-2 font-serif text-sm">↓</span>
-          </a>
-
-          <a
-            href="#studio"
-            className="btn-caps inline-flex items-center py-2 text-[#3B2417]/85 hover:text-[#B07A4F] border-b border-[#B07A4F]/40 transition-colors"
-          >
-            <span>About the studio</span>
-            <span className="ml-2 font-serif text-sm">→</span>
-          </a>
-        </div>
-
-        {/* Architectural Material Summary */}
-        <div className="text-center sm:text-right text-xs text-[#3B2417]/75">
-          <span className="text-[#B07A4F] font-medium mr-1.5">Materials:</span>
-          <span>Plantation teak · Honed limestone · Unlacquered brass · Raw linen</span>
+          </div>
         </div>
       </div>
     </section>
