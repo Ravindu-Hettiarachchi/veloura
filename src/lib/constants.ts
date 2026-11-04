@@ -8,3 +8,4 @@ export const TRANSITION_DEFAULTS = {
   duration: 1.2,
   ease: EASE,
 } as const;
+

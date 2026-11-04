@@ -14,3 +14,4 @@ export function MotionProvider({ children }: MotionProviderProps) {
     </LazyMotion>
   );
 }
+

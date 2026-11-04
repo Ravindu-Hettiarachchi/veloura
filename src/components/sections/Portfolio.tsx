@@ -180,3 +180,4 @@ function PortfolioCard({ project, index, isMobile = false }: PortfolioCardProps)
     </FadeIn>
   );
 }
+

@@ -107,3 +107,4 @@ export function Philosophy() {
     </section>
   );
 }
+

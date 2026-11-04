@@ -74,3 +74,4 @@ Files in [`public/brand/`](public/brand/):
 - Shared architectural easing constant: `EASE = [0.76, 0, 0.24, 1]`.
 - Built using Framer Motion's `LazyMotion` with `domAnimation` and `m` components for minimal bundle size.
 - Respects system preferences via `MotionConfig reducedMotion="user"`.
+

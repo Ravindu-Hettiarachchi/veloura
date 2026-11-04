@@ -105,3 +105,4 @@ export const projects: Project[] = [
       "An intimate tea lounge and boutique hotel lobby blending scorched cedar, honed granite, and subdued warm illumination.",
   },
 ];
+
