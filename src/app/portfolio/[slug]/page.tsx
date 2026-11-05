@@ -55,7 +55,7 @@ export default async function ProjectPage({ params }: Props) {
       <div className="px-6 sm:px-10 lg:px-14 max-w-7xl mx-auto mb-10">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between text-xs text-[#3B2417]/80 pb-6 border-b border-[#B07A4F]/25 gap-4">
           <div className="flex items-center space-x-3">
-            <Link href="/#portfolio" className="hover:text-[#B07A4F] transition-colors">
+            <Link href="/portfolio" className="hover:text-[#B07A4F] transition-colors">
               Portfolio
             </Link>
             <span>/</span>
@@ -157,12 +157,12 @@ export default async function ProjectPage({ params }: Props) {
             </div>
 
             <div className="pt-3">
-              <a
-                href="/#enquiry"
+              <Link
+                href="/enquiry"
                 className="btn-caps w-full min-h-[46px] py-3 rounded-full bg-[#3B2417] text-[#F6E7D0] hover:bg-[#5A3A2A] text-xs flex items-center justify-center transition-all duration-300"
               >
                 Enquire about a similar space
-              </a>
+              </Link>
             </div>
           </div>
         </div>
@@ -205,7 +205,7 @@ export default async function ProjectPage({ params }: Props) {
           </div>
 
           <Link
-            href="/#portfolio"
+            href="/portfolio"
             className="btn-caps text-xs text-[#3B2417] border-b border-[#3B2417]/40 pb-1 hover:text-[#B07A4F]"
           >
             Back to all projects

@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect, useRef } from "react";
 import Image from "next/image";
+import Link from "next/link";
 import { m, useReducedMotion } from "framer-motion";
 import { EASE } from "@/lib/constants";
 import { heroAnnotations } from "@/data/hero";
@@ -135,21 +136,21 @@ export function Hero() {
 
             {/* Buttons: min tap height 48px */}
             <div className="flex flex-wrap items-center gap-5 sm:gap-6 pt-2">
-              {/* Solid dark-roast button with cream text */}
-              <a
-                href="#portfolio"
+              {/* Solid dark-roast button with cream text linking to /portfolio */}
+              <Link
+                href="/portfolio"
                 className="min-h-[48px] px-8 py-3 rounded-full bg-[#3B2417] text-[#F6E7D0] hover:bg-[#5A3A2A] transition-all duration-300 font-sans text-sm tracking-wide inline-flex items-center justify-center focus-visible:ring-2 focus-visible:ring-[#B07A4F] shadow-xs active:scale-[0.98]"
               >
                 See our work
-              </a>
+              </Link>
 
-              {/* Plain text link with a copper underline */}
-              <a
-                href="#enquiry"
+              {/* Plain text link with a copper underline linking to /enquiry */}
+              <Link
+                href="/enquiry"
                 className="min-h-[48px] inline-flex items-center font-sans text-sm text-[#3B2417] hover:text-[#B07A4F] underline underline-offset-8 decoration-[#B07A4F] decoration-1 transition-colors focus-visible:ring-2 focus-visible:ring-[#B07A4F]"
               >
                 Start a conversation
-              </a>
+              </Link>
             </div>
           </div>
 

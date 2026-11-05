@@ -54,10 +54,9 @@ export const siteConfig: SiteConfig = {
     hours: "", // Empty by default
   },
   navigation: [
-    { label: "Studio", href: "#studio" },
-    { label: "Materials", href: "#materials" },
-    { label: "Portfolio", href: "#portfolio" },
-    { label: "Process", href: "#process" },
-    { label: "Enquiry", href: "#enquiry" },
+    { label: "Studio", href: "/studio" },
+    { label: "Portfolio", href: "/portfolio" },
+    { label: "Process", href: "/process" },
+    { label: "Enquiry", href: "/enquiry" },
   ],
 };

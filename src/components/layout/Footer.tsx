@@ -85,12 +85,12 @@ export function Footer() {
             <ul className="space-y-2.5 text-xs uppercase tracking-[0.2em]">
               {siteConfig.navigation.map((item) => (
                 <li key={item.label}>
-                  <a
+                  <Link
                     href={item.href}
                     className="text-[#F6E7D0]/75 hover:text-[#E2C196] transition-colors duration-300 focus-visible:ring-2 focus-visible:ring-caramel"
                   >
                     {item.label}
-                  </a>
+                  </Link>
                 </li>
               ))}
             </ul>

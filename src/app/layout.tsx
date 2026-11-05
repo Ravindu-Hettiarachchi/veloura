@@ -6,6 +6,7 @@ import { MotionProvider } from "@/components/motion/MotionProvider";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { FloatingWhatsApp } from "@/components/ui/FloatingWhatsApp";
+import { PageTransition } from "@/components/ui/PageTransition";
 
 const cormorant = Cormorant_Garamond({
   subsets: ["latin"],
@@ -98,9 +99,11 @@ export default function RootLayout({
 
         <MotionProvider>
           <Header />
-          <main id="main-content" className="flex-1 w-full overflow-hidden">
-            {children}
-          </main>
+          <PageTransition>
+            <main id="main-content" className="flex-1 w-full overflow-hidden">
+              {children}
+            </main>
+          </PageTransition>
           <Footer />
           <FloatingWhatsApp />
         </MotionProvider>
