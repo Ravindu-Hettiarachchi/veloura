@@ -87,6 +87,20 @@ export default function RootLayout({
       <head>
         <link rel="icon" href="/icon.png" type="image/png" sizes="512x512" />
         <link rel="apple-touch-icon" href="/apple-icon.png" sizes="180x180" />
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              try {
+                if ('scrollRestoration' in history) {
+                  history.scrollRestoration = 'manual';
+                }
+                if (window.location.hash === '' || window.location.hash === '#top') {
+                  window.scrollTo(0, 0);
+                }
+              } catch (e) {}
+            `,
+          }}
+        />
       </head>
       <body className="bg-[#F2E8DC] text-[#3B2417] selection:bg-[#E2C196] selection:text-[#24160F] antialiased min-h-screen flex flex-col font-sans">
         {/* Semantic Accessible Skip Link */}

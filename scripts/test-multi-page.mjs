@@ -21,6 +21,7 @@ async function run() {
       "--disable-gpu",
       "--user-data-dir=/tmp/chrome-test-multipage",
       "--remote-debugging-port=9228",
+      "--window-size=1440,900",
       "http://localhost:3009/",
     ],
     { stdio: "ignore" }
@@ -56,87 +57,207 @@ async function run() {
   await send("Page.enable");
   await send("Runtime.enable");
 
-  console.log("\n1. Testing initial Home page load (should show Hero section)...");
+  // Helper to take screenshot
+  const takeScreenshot = async (filepath) => {
+    const res = await send("Page.captureScreenshot", { format: "png" });
+    fs.writeFileSync(filepath, Buffer.from(res.data, "base64"));
+  };
+
+  console.log("\n--- 1. Testing Home page (/) ---");
   await send("Page.navigate", { url: "http://localhost:3009/" });
   await sleep(1500);
 
-  const homeCheck = await send("Runtime.evaluate", {
+  const homeState = await send("Runtime.evaluate", {
     expression: `
       (() => {
         const h1 = document.querySelector('h1');
-        const scrollY = window.scrollY;
+        const studioEl = document.querySelector('#studio');
+        const portfolioEl = document.querySelector('#portfolio');
         return {
-          h1Text: h1 ? h1.innerText.replace(/\\n/g, ' ') : null,
-          scrollY,
-          pathname: window.location.pathname
-        };
-      })()
-    `,
-    returnByValue: true,
-  });
-  console.log("Home check result:", homeCheck.result.value);
-
-  console.log("\n2. Testing refresh on Home page (should still show Hero section)...");
-  await send("Page.reload");
-  await sleep(1500);
-
-  const refreshCheck = await send("Runtime.evaluate", {
-    expression: `
-      (() => {
-        const h1 = document.querySelector('h1');
-        const scrollY = window.scrollY;
-        return {
-          h1Text: h1 ? h1.innerText.replace(/\\n/g, ' ') : null,
-          scrollY,
-          showsHero: h1 && h1.innerText.includes('Rooms that feel calm')
-        };
-      })()
-    `,
-    returnByValue: true,
-  });
-  console.log("Refresh check result:", refreshCheck.result.value);
-
-  console.log("\n3. Testing Studio page direct visit (/studio)...");
-  await send("Page.navigate", { url: "http://localhost:3009/studio" });
-  await sleep(1500);
-
-  const studioCheck = await send("Runtime.evaluate", {
-    expression: `
-      (() => {
-        const h2 = document.querySelector('h2');
-        return {
-          h2Text: h2 ? h2.innerText : null,
+          h1: h1 ? h1.innerText.replace(/\\n/g, ' ') : null,
+          hasStudioSectionOnHome: !!studioEl,
+          hasPortfolioSectionOnHome: !!portfolioEl,
           scrollY: window.scrollY
         };
       })()
     `,
     returnByValue: true,
   });
-  console.log("Studio page check result:", studioCheck.result.value);
+  console.log("Home Page check:", homeState.result.value);
+  await takeScreenshot("/Users/ravinduhettiarachchi/.gemini/antigravity/brain/cd97cbd6-a5cf-4c1f-a631-8566b179aa61/multipage-home.png");
 
-  console.log("\n4. Testing Portfolio page direct visit (/portfolio)...");
-  await send("Page.navigate", { url: "http://localhost:3009/portfolio" });
+  console.log("\n--- 2. Testing Refresh on Home Page ---");
+  await send("Page.reload");
   await sleep(1500);
-
-  const portfolioCheck = await send("Runtime.evaluate", {
+  const homeRefresh = await send("Runtime.evaluate", {
     expression: `
       (() => {
-        const h2 = document.querySelector('h2');
-        const filters = Array.from(document.querySelectorAll('button')).map(b => b.innerText).filter(t => ['All', 'Residential', 'Commercial'].includes(t));
+        const h1 = document.querySelector('h1');
         return {
-          h2Text: h2 ? h2.innerText : null,
-          filters
+          scrollY: window.scrollY,
+          showsHero: h1 && h1.innerText.includes('Rooms that feel calm')
         };
       })()
     `,
     returnByValue: true,
   });
-  console.log("Portfolio page check result:", portfolioCheck.result.value);
+  console.log("Home Refresh check:", homeRefresh.result.value);
+
+  console.log("\n--- 3. Testing Navigation click: Studio (/studio) ---");
+  await send("Runtime.evaluate", {
+    expression: `
+      (() => {
+        const links = Array.from(document.querySelectorAll('header nav a'));
+        const studioLink = links.find(a => a.innerText.trim() === 'Studio');
+        if (studioLink) studioLink.click();
+      })()
+    `,
+  });
+  // Check during navigation if loading veil or progress bar appears
+  await sleep(100);
+  const transitionActive = await send("Runtime.evaluate", {
+    expression: `
+      (() => {
+        const veil = document.querySelector('div[aria-hidden="true"]');
+        return veil ? true : false;
+      })()
+    `,
+    returnByValue: true,
+  });
+  console.log("Transition active immediately on click:", transitionActive.result.value);
+
+  await sleep(1200);
+  const studioState = await send("Runtime.evaluate", {
+    expression: `
+      (() => {
+        const h2 = document.querySelector('h2');
+        const h1 = document.querySelector('h1');
+        return {
+          pathname: window.location.pathname,
+          h2: h2 ? h2.innerText : null,
+          hasHero: !!h1,
+          scrollY: window.scrollY
+        };
+      })()
+    `,
+    returnByValue: true,
+  });
+  console.log("Studio Page check:", studioState.result.value);
+  await takeScreenshot("/Users/ravinduhettiarachchi/.gemini/antigravity/brain/cd97cbd6-a5cf-4c1f-a631-8566b179aa61/multipage-studio.png");
+
+  console.log("\n--- 4. Testing Navigation click: Portfolio (/portfolio) ---");
+  await send("Runtime.evaluate", {
+    expression: `
+      (() => {
+        const links = Array.from(document.querySelectorAll('header nav a'));
+        const portfolioLink = links.find(a => a.innerText.trim() === 'Portfolio');
+        if (portfolioLink) portfolioLink.click();
+      })()
+    `,
+  });
+  await sleep(1200);
+  const portfolioState = await send("Runtime.evaluate", {
+    expression: `
+      (() => {
+        const h2 = document.querySelector('h2');
+        return {
+          pathname: window.location.pathname,
+          h2: h2 ? h2.innerText : null,
+          projectCardsCount: document.querySelectorAll('a[href^="/portfolio/"]').length,
+          scrollY: window.scrollY
+        };
+      })()
+    `,
+    returnByValue: true,
+  });
+  console.log("Portfolio Page check:", portfolioState.result.value);
+  await takeScreenshot("/Users/ravinduhettiarachchi/.gemini/antigravity/brain/cd97cbd6-a5cf-4c1f-a631-8566b179aa61/multipage-portfolio.png");
+
+  console.log("\n--- 5. Testing Navigation click: Process (/process) ---");
+  await send("Runtime.evaluate", {
+    expression: `
+      (() => {
+        const links = Array.from(document.querySelectorAll('header nav a'));
+        const processLink = links.find(a => a.innerText.trim() === 'Process');
+        if (processLink) processLink.click();
+      })()
+    `,
+  });
+  await sleep(1200);
+  const processState = await send("Runtime.evaluate", {
+    expression: `
+      (() => {
+        const h2 = document.querySelector('h2');
+        return {
+          pathname: window.location.pathname,
+          h2: h2 ? h2.innerText : null,
+          scrollY: window.scrollY
+        };
+      })()
+    `,
+    returnByValue: true,
+  });
+  console.log("Process Page check:", processState.result.value);
+  await takeScreenshot("/Users/ravinduhettiarachchi/.gemini/antigravity/brain/cd97cbd6-a5cf-4c1f-a631-8566b179aa61/multipage-process.png");
+
+  console.log("\n--- 6. Testing Navigation click: Enquiry (/enquiry) ---");
+  await send("Runtime.evaluate", {
+    expression: `
+      (() => {
+        const links = Array.from(document.querySelectorAll('header nav a'));
+        const enquiryLink = links.find(a => a.innerText.trim() === 'Enquiry');
+        if (enquiryLink) enquiryLink.click();
+      })()
+    `,
+  });
+  await sleep(1200);
+  const enquiryState = await send("Runtime.evaluate", {
+    expression: `
+      (() => {
+        const h2 = document.querySelector('h2');
+        const formButtons = document.querySelectorAll('button').length;
+        return {
+          pathname: window.location.pathname,
+          h2: h2 ? h2.innerText : null,
+          hasFormButtons: formButtons > 0,
+          scrollY: window.scrollY
+        };
+      })()
+    `,
+    returnByValue: true,
+  });
+  console.log("Enquiry Page check:", enquiryState.result.value);
+  await takeScreenshot("/Users/ravinduhettiarachchi/.gemini/antigravity/brain/cd97cbd6-a5cf-4c1f-a631-8566b179aa61/multipage-enquiry.png");
+
+  console.log("\n--- 7. Testing Logo click back to Home (/) ---");
+  await send("Runtime.evaluate", {
+    expression: `
+      (() => {
+        const logo = document.querySelector('header a[aria-label="VELOURA Home"]');
+        if (logo) logo.click();
+      })()
+    `,
+  });
+  await sleep(1200);
+  const logoReturnState = await send("Runtime.evaluate", {
+    expression: `
+      (() => {
+        const h1 = document.querySelector('h1');
+        return {
+          pathname: window.location.pathname,
+          showsHero: h1 && h1.innerText.includes('Rooms that feel calm'),
+          scrollY: window.scrollY
+        };
+      })()
+    `,
+    returnByValue: true,
+  });
+  console.log("Return to Home check:", logoReturnState.result.value);
 
   ws.close();
   chrome.kill();
   server.kill();
-  console.log("\nMulti-page verification completed successfully!");
+  console.log("\nAll multi-page & refresh checks completed successfully!");
   process.exit(0);
 }
 
